@@ -1,3 +1,3 @@
-# Copy Cat
+# Bullhorn
 
-A template repository for new queue based services.
+_Get your message out_
