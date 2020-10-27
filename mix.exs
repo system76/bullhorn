@@ -9,7 +9,7 @@ defmodule Bullhorn.MixProject do
       start_permanent: Mix.env() == :prod,
       deps: deps(),
       releases: [
-        copycat: [
+        bullhorn: [
           include_executables_for: [:unix],
           applications: [runtime_tools: :permanent]
         ]
