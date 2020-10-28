@@ -6,7 +6,6 @@ defmodule Bullhorn.Broadway do
 
   alias Broadway.Message
   alias Bottle.Core.V1.Bottle
-  alias Bottle.Notification.V1.{Notification, Error}
 
   def start_link(_opts) do
     producer_module = Application.fetch_env!(:bullhorn, :producer)
@@ -55,5 +54,21 @@ defmodule Bullhorn.Broadway do
     end)
   end
 
-  defp notify_handler(%Error{} = error), do: ErrorHandler.handle_message(error)
+  defp notify_handler(%mod{} = message) do
+    {handler, _messages} =
+      Enum.find(message_handlers(), fn {_handler, messages} ->
+        mod in messages
+      end)
+
+    case handler do
+      nil ->
+        Logger.debug("Ignored #{mod} message")
+
+      mod ->
+        Logger.debug("Handling #{mod} message")
+        apply(mod, :handle_message, [message])
+    end
+  end
+
+  defp message_handlers, do: Application.get_env(:bullhorn, :message_handlers)
 end

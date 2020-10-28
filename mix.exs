@@ -29,6 +29,7 @@ defmodule Bullhorn.MixProject do
   defp deps do
     [
       {:appsignal, "~> 1.0"},
+      {:bamboo, "~> 1.6"},
       {:bottle, github: "system76/bottle", branch: "elixir"},
       {:broadway_sqs, "~> 0.6.0"},
       {:saxy, "~> 1.1"},
