@@ -8,11 +8,7 @@ config :bullhorn,
        access_key_id: "",
        secret_access_key: "",
        region: "us-east-2"
-     ]},
-  channels: %{
-    "#devops" => "",
-    "#operations-software" => ""
-  }
+     ]}
 
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",
@@ -22,5 +18,7 @@ config :logger, :console,
 config :appsignal, :config,
   active: false,
   name: "Bullhorn"
+
+config :bullhorn, Bullorn.Mailer, adapter: Bamboo.LocalAdapter
 
 import_config "#{Mix.env()}.exs"
