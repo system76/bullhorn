@@ -28,7 +28,7 @@ defmodule Bullhorn.Emails.UserEmails do
     new_email()
     |> to({full_name(user), email})
     |> from("no-reply@system76.com")
-    |> subject("Recover your account")
+    |> subject("Recover your System76 account")
     |> MailgunHelper.template("user_recovery")
     |> MailgunHelper.substitute_variables("user", user_variables)
   end
