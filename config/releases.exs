@@ -5,19 +5,14 @@ bullhorn_config =
   |> System.fetch_env!()
   |> Jason.decode!()
 
-producer_config =
-  "SQS_PRODUCER"
-  |> System.fetch_env!()
-  |> Jason.decode!()
-
 config :bullhorn,
   producer:
     {BroadwaySQS.Producer,
-     queue_url: producer_config["queue_url"],
+     queue_url: bullhorn_config["SQS_QUEUE_URL"],
      config: [
-       access_key_id: producer_config["access_key_id"],
-       secret_access_key: producer_config["secret_access_key"],
-       region: producer_config["region"]
+       access_key_id: bullhorn_config["ACCESS_KEY_ID"],
+       secret_access_key: bullhorn_config["SECRET_ACCESS_KEY"],
+       region: bullhorn_config["REGION"]
      ]}
 
 config :appsignal, :config,
