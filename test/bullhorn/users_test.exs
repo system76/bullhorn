@@ -20,7 +20,7 @@ defmodule Bullhorn.UsersTest do
 
     test "sends a password reset for PasswordReset message types", %{user: user} do
       Users.handle_message(%PasswordReset{user: user, reset_key: "ABC123"})
-      assert_email_delivered_with(to: [{"Test User", user.email}], subject: "Recover your account")
+      assert_email_delivered_with(to: [{"Test User", user.email}], subject: "Recover your System76 account")
     end
 
     test "sends a password changed notification for PasswordChanged message types", %{user: user} do
