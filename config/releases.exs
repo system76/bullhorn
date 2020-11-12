@@ -12,11 +12,11 @@ config :bullhorn,
      config: [
        access_key_id: bullhorn_config["ACCESS_KEY_ID"],
        secret_access_key: bullhorn_config["SECRET_ACCESS_KEY"],
-       region: bullhorn_config["REGION"]
+       region: bullhorn_config["SQS_QUEUE_REGION"]
      ]}
 
 config :appsignal, :config,
-  push_api_key: bullhorn_config["APPSIGNAL_KEY"],
+  push_api_key: bullhorn_config["APPSIGNAL_PUSH_KEY"],
   env: bullhorn_config["APPSIGNAL_ENV"]
 
 config :bullhorn, Bullhorn.Mailer,
