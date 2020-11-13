@@ -12,7 +12,7 @@ defmodule Bullhorn.Application do
       {Bullhorn.Broadway, []}
     ]
 
-    Logger.info("Starting Copy Cat")
+    Logger.info("Starting Bullhorn")
 
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options
