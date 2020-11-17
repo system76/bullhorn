@@ -25,14 +25,14 @@ config :bullhorn,
   message_handlers: [
     {Bullhorn.Orders,
      [
-       Bottle.Notification.Order.V1.AssemblyFailure
+       :assembly_failure
      ]},
     {
       Bullhorn.Users,
       [
-        Bottle.Notification.User.V1.PasswordChanged,
-        Bottle.Notification.User.V1.PasswordReset,
-        Bottle.Notification.User.V1.Welcome
+        :password_changed,
+        :password_reset,
+        :user_created
       ]
     }
   ]

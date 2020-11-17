@@ -52,20 +52,22 @@ defmodule Bullhorn.Broadway do
     Appsignal.send_error(%RuntimeError{}, "Failed Broadway Message", [], %{}, nil, fn transaction ->
       Appsignal.Transaction.set_sample_data(transaction, "message", %{data: failed_message.data})
     end)
+
+    [failed_message]
   end
 
-  defp notify_handler(%mod{} = message) do
+  defp notify_handler({type, message}) do
     {handler, _messages} =
-      Enum.find(message_handlers(), fn {_handler, messages} ->
-        mod in messages
+      Enum.find(message_handlers(), fn {_handler, message_types} ->
+        type in message_types
       end)
 
     case handler do
       nil ->
-        Logger.debug("Ignored #{mod} message")
+        Logger.debug("Ignored #{type} message")
 
       mod ->
-        Logger.debug("Handling #{mod} message")
+        Logger.debug("Handling #{type} message")
         apply(mod, :handle_message, [message])
     end
   end

@@ -30,6 +30,7 @@ defmodule Bullhorn.MixProject do
     [
       {:appsignal, "~> 1.0"},
       {:bamboo, "~> 1.6"},
+      {:plug, "~> 1.1"},
       {:bottle, github: "system76/bottle", branch: "elixir"},
       {:broadway_sqs, "~> 0.6.0"},
       {:saxy, "~> 1.1"},
