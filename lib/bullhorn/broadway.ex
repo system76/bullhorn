@@ -52,6 +52,8 @@ defmodule Bullhorn.Broadway do
     Appsignal.send_error(%RuntimeError{}, "Failed Broadway Message", [], %{}, nil, fn transaction ->
       Appsignal.Transaction.set_sample_data(transaction, "message", %{data: failed_message.data})
     end)
+
+    [failed_message]
   end
 
   defp notify_handler({type, message}) do
