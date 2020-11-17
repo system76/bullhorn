@@ -19,7 +19,7 @@ config :appsignal, :config,
   active: false,
   name: "Bullhorn"
 
-config :bullhorn, Bullorn.Mailer, adapter: Bamboo.LocalAdapter
+config :bullhorn, Bullhorn.Mailer, adapter: Bamboo.LocalAdapter
 
 config :bullhorn,
   message_handlers: [
