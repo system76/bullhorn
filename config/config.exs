@@ -21,20 +21,4 @@ config :appsignal, :config,
 
 config :bullhorn, Bullhorn.Mailer, adapter: Bamboo.LocalAdapter
 
-config :bullhorn,
-  message_handlers: [
-    {Bullhorn.Orders,
-     [
-       :assembly_failure
-     ]},
-    {
-      Bullhorn.Users,
-      [
-        :password_changed,
-        :password_reset,
-        :user_created
-      ]
-    }
-  ]
-
 import_config "#{Mix.env()}.exs"
