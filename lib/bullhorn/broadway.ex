@@ -4,8 +4,9 @@ defmodule Bullhorn.Broadway do
 
   require Logger
 
-  alias Broadway.Message
   alias Bottle.Core.V1.Bottle
+  alias Broadway.Message
+  alias Bullhorn.{Orders, Users}
 
   def start_link(_opts) do
     producer_module = Application.fetch_env!(:bullhorn, :producer)
@@ -37,7 +38,9 @@ defmodule Bullhorn.Broadway do
 
     Logger.metadata(request_id: request_id)
 
-    notify_handler(resource)
+    with {:ok, reason} <- notify_handler(resource) do
+      Logger.error(reason)
+    end
 
     message
   end
@@ -56,21 +59,28 @@ defmodule Bullhorn.Broadway do
     [failed_message]
   end
 
-  defp notify_handler({type, message}) do
-    {handler, _messages} =
-      Enum.find(message_handlers(), fn {_handler, message_types} ->
-        type in message_types
-      end)
-
-    case handler do
-      nil ->
-        Logger.debug("Ignored #{type} message")
-
-      mod ->
-        Logger.debug("Handling #{type} message")
-        apply(mod, :handle_message, [message])
-    end
+  defp notify_handler({:user_created, message}) do
+    Logger.debug("Handling User Created message")
+    Users.created(message)
   end
 
-  defp message_handlers, do: Application.get_env(:bullhorn, :message_handlers)
+  defp notify_handler({:password_changed, message}) do
+    Logger.debug("Handling Password Changed message")
+    Users.password_changed(message)
+  end
+
+  defp notify_handler({:password_reset, message}) do
+    Logger.debug("Handling Password Reset message")
+    Users.password_reset(message)
+  end
+
+  defp notify_handler({:tribble_failed, message}) do
+    Logger.debug("Handling Tribble Failed message")
+    Orders.tribble_failed(message)
+  end
+
+  defp notify_handler(_) do
+    Logger.debug("Ignoring message")
+    :ignored
+  end
 end

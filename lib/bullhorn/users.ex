@@ -5,24 +5,30 @@ defmodule Bullhorn.Users do
 
   require Logger
 
-  alias Bottle.Notification.User.V1.{Created, PasswordChanged, PasswordReset}
+  alias Bottle.Account.V1.{PasswordChanged, PasswordReset, UserCreated}
   alias Bullhorn.Emails.UserEmails
   alias Bullhorn.Mailer
 
-  def handle_message(%{user: %{id: user_id}} = message) do
-    Logger.metadata(recipient_id: user_id)
-
-    message
-    |> build_email()
-    |> Mailer.send()
+  def password_changed(%PasswordChanged{user: user}) do
+    user
+    |> UserEmails.password_changed()
+    |> send_user_email(user)
   end
 
-  defp build_email(%PasswordChanged{user: user}),
-    do: UserEmails.password_changed(user)
+  def password_reset(%PasswordReset{user: user, reset_key: reset_key}) do
+    user
+    |> UserEmails.password_reset(reset_key)
+    |> send_user_email(user)
+  end
 
-  defp build_email(%PasswordReset{user: user, reset_key: reset_key}),
-    do: UserEmails.password_reset(user, reset_key)
+  def created(%UserCreated{user: user}) do
+    user
+    |> UserEmails.welcome()
+    |> send_user_email(user)
+  end
 
-  defp build_email(%Created{user: user}),
-    do: UserEmails.welcome(user)
+  defp send_user_email(email, user) do
+    Logger.metadata(recipient_id: user.id)
+    Mailer.send(email)
+  end
 end

@@ -31,7 +31,7 @@ defmodule Bullhorn.MixProject do
       {:appsignal, "~> 1.0"},
       {:bamboo, "~> 1.6"},
       {:plug, "~> 1.1"},
-      {:bottle, github: "system76/bottle", branch: "elixir", sha: "2ef6806"},
+      {:bottle, github: "system76/bottle", branch: "elixir", sha: "62255e2"},
       {:broadway_sqs, "~> 0.6.0"},
       {:saxy, "~> 1.1"},
       {:hackney, "~> 1.16"},
