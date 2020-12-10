@@ -15,9 +15,9 @@ defmodule Bullhorn.Users do
     |> send_user_email(user)
   end
 
-  def password_reset(%PasswordReset{user: user, reset_key: reset_key}) do
+  def password_reset(%PasswordReset{user: user, reset_url: reset_url}) do
     user
-    |> UserEmails.password_reset(reset_key)
+    |> UserEmails.password_reset(reset_url)
     |> send_user_email(user)
   end
 
