@@ -5,9 +5,23 @@ defmodule Bullhorn.Users do
 
   require Logger
 
-  alias Bottle.Account.V1.{PasswordChanged, PasswordReset, UserCreated}
+  alias Bottle.Account.V1.{
+    NotificationMethodRequest,
+    PasswordChanged,
+    PasswordReset,
+    Stub,
+    TwoFactorRequested,
+    UserCreated
+  }
+
   alias Bullhorn.Emails.UserEmails
-  alias Bullhorn.Mailer
+  alias Bullhorn.{Mailer, Twilio}
+
+  def created(%UserCreated{user: user}) do
+    user
+    |> UserEmails.welcome()
+    |> send_user_email(user)
+  end
 
   def password_changed(%PasswordChanged{user: user}) do
     user
@@ -21,14 +35,33 @@ defmodule Bullhorn.Users do
     |> send_user_email(user)
   end
 
-  def created(%UserCreated{user: user}) do
-    user
-    |> UserEmails.welcome()
-    |> send_user_email(user)
+  def two_factor_requested(%TwoFactorRequested{token: token, user: user}) do
+    case user_notification_method(user, "two_factor") do
+      {:NOTIFICATION_METHOD_SMS, user} ->
+        Twilio.deliver_sms_two_factor_token(user, token)
+
+      {:NOTIFICATION_METHOD_VOICE, user} ->
+        Twilio.deliver_voice_two_factor_token(user, token)
+
+      _ ->
+        :ignored
+    end
   end
+
+  defp account_service_url, do: Application.get_env(:recognizer, :account_service_url)
 
   defp send_user_email(email, user) do
     Logger.metadata(recipient_id: user.id)
     Mailer.send(email)
+  end
+
+  defp user_notification_method(user, event_type) do
+    request =
+      NotificationMethodRequest.new(event_type: event_type, request_id: Bottle.RequestId.write(:queue), user: user)
+
+    with {:ok, channel} <- GRPC.Stub.connect(account_service_url(), interceptors: [GRPC.Logger.Client]),
+         {:ok, reply} <- Stub.notification_method(channel, request) do
+      {reply.notification_method, reply.user}
+    end
   end
 end

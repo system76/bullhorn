@@ -73,6 +73,11 @@ defmodule Bullhorn.Broadway do
     Users.password_reset(message)
   end
 
+  defp notify_handler({:two_factor_requested, message}) do
+    Logger.debug("Handling Two Factor message")
+    Users.two_factor_requested(message)
+  end
+
   defp notify_handler({:tribble_failed, message}) do
     Logger.debug("Handling Tribble Failed message")
     Orders.tribble_failed(message)
