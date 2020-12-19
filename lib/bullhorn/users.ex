@@ -1,6 +1,6 @@
 defmodule Bullhorn.Users do
   @moduledoc """
-  Handle the logic for User related notifications both to customers and employees 
+  Handle the logic for User related notifications both to customers and employees
   """
 
   require Logger
@@ -48,7 +48,7 @@ defmodule Bullhorn.Users do
     end
   end
 
-  defp account_service_url, do: Application.get_env(:recognizer, :account_service_url)
+  defp account_service_url, do: Application.get_env(:bullhorn, :account_service_url)
 
   defp send_user_email(email, user) do
     Logger.metadata(recipient_id: user.id)
