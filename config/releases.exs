@@ -1,4 +1,4 @@
-zimport Config
+import Config
 
 bullhorn_config =
   "CONFIG"
