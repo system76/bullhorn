@@ -1,4 +1,4 @@
-import Config
+zimport Config
 
 bullhorn_config =
   "CONFIG"
@@ -10,8 +10,8 @@ config :bullhorn,
     {BroadwaySQS.Producer,
      queue_url: bullhorn_config["SQS_QUEUE_URL"],
      config: [
-       access_key_id: bullhorn_config["ACCESS_KEY_ID"],
-       secret_access_key: bullhorn_config["SECRET_ACCESS_KEY"],
+       access_key_id: bullhorn_config["AWS_ACCESS_KEY_ID"],
+       secret_access_key: bullhorn_config["AWS_SECRET_ACCESS_KEY"],
        region: bullhorn_config["SQS_QUEUE_REGION"]
      ]},
   phone_number: bullhorn_config["TWILIO_PHONE_NUMBER"]
@@ -30,3 +30,8 @@ config :ex_twilio,
 
 config :bullhorn,
   account_service_url: bullhorn_config["ACCOUNT_SERVICE_URL"]
+
+config :ex_aws,
+  access_key_id: recognizer_config["AWS_ACCESS_KEY_ID"],
+  secret_access_key: recognizer_config["AWS_SECRET_ACCESS_KEY"],
+  region: recognizer_config["AWS_REGION"]

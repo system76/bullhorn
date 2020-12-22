@@ -29,4 +29,9 @@ config :ex_twilio,
 config :bullhorn,
   account_service_url: ""
 
+config :ex_aws,
+  access_key_id: "",
+  secret_access_key: "",
+  region: ""
+
 import_config "#{Mix.env()}.exs"
