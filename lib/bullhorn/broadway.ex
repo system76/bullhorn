@@ -37,7 +37,7 @@ defmodule Bullhorn.Broadway do
 
     Bottle.RequestId.read(:queue, bottle)
 
-    with {:ok, reason} <- notify_handler(bottle.resource) do
+    with {:error, reason} <- notify_handler(bottle.resource) do
       Logger.error(reason)
     end
 
@@ -85,6 +85,7 @@ defmodule Bullhorn.Broadway do
 
   defp notify_handler(_) do
     Logger.debug("Ignoring message")
+
     {:ok, :ignored}
   end
 end

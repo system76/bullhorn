@@ -36,6 +36,12 @@ defmodule Bullhorn.Users do
   end
 
   def two_factor_requested(%TwoFactorRequested{token: token, user: user}) do
+    with {:error, map, _status_code} <- deliver_two_factor_token(user, token) do
+      {:error, inspect(map)}
+    end
+  end
+
+  defp deliver_two_factor_token(user, token) do
     case user_notification_method(user, "two_factor") do
       {:NOTIFICATION_METHOD_SMS, user} ->
         Twilio.deliver_sms_two_factor_token(user, token)
@@ -52,7 +58,7 @@ defmodule Bullhorn.Users do
 
   defp send_user_email(email, user) do
     Logger.metadata(recipient_id: user.id)
-    Mailer.send(email)
+    Mailer.send(email, response: true)
   end
 
   defp user_notification_method(user, event_type) do
