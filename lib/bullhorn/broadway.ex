@@ -85,6 +85,6 @@ defmodule Bullhorn.Broadway do
 
   defp notify_handler(_) do
     Logger.debug("Ignoring message")
-    :ignored
+    {:ok, :ignored}
   end
 end
