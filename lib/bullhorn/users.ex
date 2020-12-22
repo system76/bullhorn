@@ -58,7 +58,7 @@ defmodule Bullhorn.Users do
 
   defp send_user_email(email, user) do
     Logger.metadata(recipient_id: user.id)
-    Mailer.send(email, response: true)
+    Mailer.send(email)
   end
 
   defp user_notification_method(user, event_type) do
