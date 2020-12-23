@@ -12,7 +12,7 @@ defmodule Bullhorn.Twilio do
       token
       |> String.upcase()
       |> String.split("")
-      |> Enum.join(" ")
+      |> Enum.join(". ")
 
     twiml = """
     <Response>
