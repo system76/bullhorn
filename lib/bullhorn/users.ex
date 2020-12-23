@@ -62,11 +62,11 @@ defmodule Bullhorn.Users do
   end
 
   defp user_notification_method(user, event_type) do
-    credentials = GRPC.Credential.new([])
     request =
       NotificationMethodRequest.new(event_type: event_type, request_id: Bottle.RequestId.write(:rpc), user: user)
 
-    with {:ok, channel} <- GRPC.Stub.connect(account_service_url(), cred: credentials, interceptors: [GRPC.Logger.Client]),
+    with {:ok, channel} <-
+           GRPC.Stub.connect(account_service_url(), cred: GRPC.Credential.new([]), interceptors: [GRPC.Logger.Client]),
          {:ok, reply} <- Stub.notification_method(channel, request) do
       {reply.notification_method, reply.user}
     end
