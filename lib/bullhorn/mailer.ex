@@ -7,16 +7,16 @@ defmodule Bullhorn.Mailer do
   @decorate transaction(:email)
   def send(email) do
     Logger.debug("Sending email: #{email.subject}")
-    {:ok, deliver_now(email)}
+    deliver_now(email)
   rescue
     e in Bamboo.ApiError -> bamboo_error(e)
   end
 
-  defp bamboo_error(%{message: message}) do
+  defp bamboo_error(%{message: message} = e) do
     if String.contains?(message, "Sandbox subdomains are for test purposes only") do
       :ignored
     else
-      {:error, message}
+      raise e
     end
   end
 end

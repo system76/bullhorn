@@ -5,7 +5,7 @@ defmodule Bullhorn.Broadway do
   require Logger
 
   alias Broadway.Message
-  alias Bullhorn.{Orders, Users}
+  alias Bottle.Core.V1.Bottle
 
   def start_link(_opts) do
     producer_module = Application.fetch_env!(:bullhorn, :producer)
@@ -30,16 +30,14 @@ defmodule Bullhorn.Broadway do
   @impl true
   @decorate transaction(:queue)
   def handle_message(_, %Message{data: data} = message, _context) do
-    bottle =
+    %{resource: resource, request_id: request_id} =
       data
       |> URI.decode()
-      |> Bottle.Core.V1.Bottle.decode()
+      |> Bottle.decode()
 
-    Bottle.RequestId.read(:queue, bottle)
+    Logger.metadata(request_id: request_id)
 
-    with {:error, reason} <- notify_handler(bottle.resource) do
-      Logger.error(reason)
-    end
+    notify_handler(resource)
 
     message
   end
@@ -58,34 +56,21 @@ defmodule Bullhorn.Broadway do
     [failed_message]
   end
 
-  defp notify_handler({:user_created, message}) do
-    Logger.debug("Handling User Created message")
-    Users.created(message)
+  defp notify_handler({type, message}) do
+    {handler, _messages} =
+      Enum.find(message_handlers(), fn {_handler, message_types} ->
+        type in message_types
+      end)
+
+    case handler do
+      nil ->
+        Logger.debug("Ignored #{type} message")
+
+      mod ->
+        Logger.debug("Handling #{type} message")
+        apply(mod, :handle_message, [message])
+    end
   end
 
-  defp notify_handler({:password_changed, message}) do
-    Logger.debug("Handling Password Changed message")
-    Users.password_changed(message)
-  end
-
-  defp notify_handler({:password_reset, message}) do
-    Logger.debug("Handling Password Reset message")
-    Users.password_reset(message)
-  end
-
-  defp notify_handler({:two_factor_requested, message}) do
-    Logger.debug("Handling Two Factor message")
-    Users.two_factor_requested(message)
-  end
-
-  defp notify_handler({:tribble_failed, message}) do
-    Logger.debug("Handling Tribble Failed message")
-    Orders.tribble_failed(message)
-  end
-
-  defp notify_handler(_) do
-    Logger.debug("Ignoring message")
-
-    {:ok, :ignored}
-  end
+  defp message_handlers, do: Application.get_env(:bullhorn, :message_handlers)
 end
