@@ -2,7 +2,7 @@ defmodule Bullhorn.Twilio do
   def deliver_sms_two_factor_token(user, token) do
     ExTwilio.Message.create(
       from: bullhorn_phone_number(),
-      message: "System76 Security Code: #{String.upcase(token)}",
+      body: "System76 Security Code: #{String.upcase(token)}",
       to: user.phone_number
     )
   end
