@@ -8,7 +8,8 @@ config :bullhorn,
        access_key_id: "",
        secret_access_key: "",
        region: "us-east-2"
-     ]}
+     ]},
+  phone_number: ""
 
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",
@@ -21,20 +22,11 @@ config :appsignal, :config,
 
 config :bullhorn, Bullhorn.Mailer, adapter: Bamboo.LocalAdapter
 
+config :ex_twilio,
+  account_sid: "",
+  auth_token: ""
+
 config :bullhorn,
-  message_handlers: [
-    {Bullhorn.Orders,
-     [
-       :assembly_failure
-     ]},
-    {
-      Bullhorn.Users,
-      [
-        :password_changed,
-        :password_reset,
-        :user_created
-      ]
-    }
-  ]
+  account_service_url: ""
 
 import_config "#{Mix.env()}.exs"
