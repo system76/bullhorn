@@ -78,6 +78,11 @@ defmodule Bullhorn.Broadway do
     Users.two_factor_requested(message)
   end
 
+  defp notify_handler({:recovery_code_used, message}) do
+    Logger.debug("Handling Recovery Code Used message")
+    Users.recovery_code_used(message)
+  end
+
   defp notify_handler({:tribble_failed, message}) do
     Logger.debug("Handling Tribble Failed message")
     Orders.tribble_failed(message)

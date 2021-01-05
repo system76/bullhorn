@@ -41,6 +41,12 @@ defmodule Bullhorn.Users do
     end
   end
 
+  def recovery_code_used(%TwoFactorRecoveryCodeUsed{codes_remaining: remaining, recovery_code: used_code, user: user}) do
+    user
+    |> UserEmails.password_reset(used_code, remaining)
+    |> send_user_email(user)
+  end
+
   defp deliver_two_factor_token(user, token) do
     case user_notification_method(user, "two_factor") do
       {:NOTIFICATION_METHOD_SMS, user} ->
