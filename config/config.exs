@@ -26,7 +26,4 @@ config :ex_twilio,
   account_sid: "",
   auth_token: ""
 
-config :bullhorn,
-  account_service_url: ""
-
 import_config "#{Mix.env()}.exs"

@@ -27,6 +27,3 @@ config :bullhorn, Bullhorn.Mailer,
 config :ex_twilio,
   account_sid: bullhorn_config["TWILIO_ACCOUNT_SID"],
   auth_token: bullhorn_config["TWILIO_AUTH_TOKEN"]
-
-config :bullhorn,
-  account_service_url: bullhorn_config["ACCOUNT_SERVICE_URL"]
