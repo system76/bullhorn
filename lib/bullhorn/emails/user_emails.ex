@@ -17,13 +17,13 @@ defmodule Bullhorn.Emails.UserEmails do
     |> MailgunHelper.substitute_variables("user", user_variables)
   end
 
-  def password_reset(%{email: email} = user, reset_key) do
+  def password_reset(%{email: email} = user, reset_url) do
     fields_for_email = [:email, :first_name, :last_name]
 
     user_variables =
       user
       |> Map.take(fields_for_email)
-      |> Map.put(:reset_key, reset_key)
+      |> Map.put(:reset_url, reset_url)
 
     new_email()
     |> to({full_name(user), email})
