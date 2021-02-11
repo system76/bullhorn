@@ -1,28 +1,55 @@
 defmodule Bullhorn.Users do
   @moduledoc """
-  Handle the logic for User related notifications both to customers and employees 
+  Handle the logic for User related notifications both to customers and employees
   """
 
   require Logger
 
-  alias Bottle.Notification.User.V1.{Created, PasswordChanged, PasswordReset}
+  alias Bottle.Account.V1.{
+    PasswordChanged,
+    PasswordReset,
+    TwoFactorRequested,
+    TwoFactorRecoveryCodeUsed,
+    UserCreated
+  }
+
   alias Bullhorn.Emails.UserEmails
-  alias Bullhorn.Mailer
+  alias Bullhorn.{Mailer, Twilio}
 
-  def handle_message(%{user: %{id: user_id}} = message) do
-    Logger.metadata(recipient_id: user_id)
-
-    message
-    |> build_email()
-    |> Mailer.send()
+  def created(%UserCreated{user: user}) do
+    user
+    |> UserEmails.welcome()
+    |> send_user_email(user)
   end
 
-  defp build_email(%PasswordChanged{user: user}),
-    do: UserEmails.password_changed(user)
+  def password_changed(%PasswordChanged{user: user}) do
+    user
+    |> UserEmails.password_changed()
+    |> send_user_email(user)
+  end
 
-  defp build_email(%PasswordReset{user: user, reset_key: reset_key}),
-    do: UserEmails.password_reset(user, reset_key)
+  def password_reset(%PasswordReset{user: user, reset_url: reset_url}) do
+    user
+    |> UserEmails.password_reset(reset_url)
+    |> send_user_email(user)
+  end
 
-  defp build_email(%Created{user: user}),
-    do: UserEmails.welcome(user)
+  def two_factor_requested(%TwoFactorRequested{token: token, user: user, method: :TWO_FACTOR_METHOD_SMS}) do
+    Twilio.deliver_sms_two_factor_token(user, token)
+  end
+
+  def two_factor_requested(%TwoFactorRequested{token: token, user: user, method: :TWO_FACTOR_METHOD_VOICE}) do
+    Twilio.deliver_voice_two_factor_token(user, token)
+  end
+
+  def recovery_code_used(%TwoFactorRecoveryCodeUsed{codes_remaining: remaining, recovery_code: used_code, user: user}) do
+    user
+    |> UserEmails.recovery_code_used(used_code, remaining)
+    |> send_user_email(user)
+  end
+
+  defp send_user_email(email, user) do
+    Logger.metadata(recipient_id: user.id)
+    Mailer.send(email)
+  end
 end

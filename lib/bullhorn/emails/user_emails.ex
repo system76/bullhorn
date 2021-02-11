@@ -17,13 +17,13 @@ defmodule Bullhorn.Emails.UserEmails do
     |> MailgunHelper.substitute_variables("user", user_variables)
   end
 
-  def password_reset(%{email: email} = user, reset_key) do
+  def password_reset(%{email: email} = user, reset_url) do
     fields_for_email = [:email, :first_name, :last_name]
 
     user_variables =
       user
       |> Map.take(fields_for_email)
-      |> Map.put(:reset_key, reset_key)
+      |> Map.put(:reset_url, reset_url)
 
     new_email()
     |> to({full_name(user), email})
@@ -40,6 +40,17 @@ defmodule Bullhorn.Emails.UserEmails do
     |> subject("Your System76 password has been updated")
     |> MailgunHelper.template("password_was_reset")
     |> MailgunHelper.substitute_variables("first_name", first_name)
+  end
+
+  def recovery_code_used(%{email: email, first_name: first_name} = user, used_code, codes_remaining) do
+    new_email()
+    |> to({full_name(user), email})
+    |> from("no-reply@system76.com")
+    |> subject("A recovery code for your System76 account has been used")
+    |> MailgunHelper.template("recovery_code_used")
+    |> MailgunHelper.substitute_variables("first_name", first_name)
+    |> MailgunHelper.substitute_variables("recovery_code", used_code)
+    |> MailgunHelper.substitute_variables("codes_remaining", codes_remaining)
   end
 
   defp full_name(%{first_name: first, last_name: last}), do: String.trim("#{first} #{last}")
