@@ -59,38 +59,43 @@ defmodule Bullhorn.Broadway do
   end
 
   defp notify_handler({:user_created, message}) do
-    Logger.debug("Handling User Created message")
+    Logger.metadata(user_id: message.user.id)
+    Logger.info("Handling User Created message")
     Users.created(message)
   end
 
   defp notify_handler({:password_changed, message}) do
-    Logger.debug("Handling Password Changed message")
+    Logger.metadata(user_id: message.user.id)
+    Logger.info("Handling Password Changed message")
     Users.password_changed(message)
   end
 
   defp notify_handler({:password_reset, message}) do
-    Logger.debug("Handling Password Reset message")
+    Logger.metadata(user_id: message.user.id)
+    Logger.info("Handling Password Reset message")
     Users.password_reset(message)
   end
 
   defp notify_handler({:two_factor_requested, message}) do
-    Logger.debug("Handling Two Factor message")
+    Logger.metadata(user_id: message.user.id)
+    Logger.info("Handling Two Factor message")
     Users.two_factor_requested(message)
   end
 
   defp notify_handler({:recovery_code_used, message}) do
-    Logger.debug("Handling Recovery Code Used message")
+    Logger.metadata(user_id: message.user.id)
+    Logger.info("Handling Recovery Code Used message")
     Users.recovery_code_used(message)
   end
 
   defp notify_handler({:tribble_failed, message}) do
-    Logger.debug("Handling Tribble Failed message")
+    Logger.metadata(order_id: message.order.id)
+    Logger.info("Handling Tribble Failed message")
     Orders.tribble_failed(message)
   end
 
-  defp notify_handler(_) do
-    Logger.debug("Ignoring message")
-
+  defp notify_handler({event, _message}) do
+    Logger.warn("Ignoring #{event} message")
     {:ok, :ignored}
   end
 end
