@@ -1,5 +1,9 @@
 use Mix.Config
 
+config :logger,
+  backends: [LoggerJSON],
+  level: :info
+
 config :appsignal, :config, active: true
 
 config :bullhorn, Bullhorn.Tracer, disabled?: false
