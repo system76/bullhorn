@@ -1,4 +1,9 @@
 defmodule Bullhorn.Twilio do
+  use Appsignal.Instrumentation.Decorators
+  use Spandex.Decorators
+
+  @decorate transaction(:twilio)
+  @decorate span(service: :twilio, type: :web)
   def deliver_sms_two_factor_token(user, token) do
     ExTwilio.Message.create(
       from: bullhorn_phone_number(),
@@ -7,6 +12,8 @@ defmodule Bullhorn.Twilio do
     )
   end
 
+  @decorate transaction(:twilio)
+  @decorate span(service: :twilio, type: :web)
   def deliver_voice_two_factor_token(user, token) do
     spaced_out_token =
       token

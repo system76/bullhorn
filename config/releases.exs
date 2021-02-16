@@ -20,6 +20,8 @@ config :appsignal, :config,
   push_api_key: bullhorn_config["APPSIGNAL_PUSH_KEY"],
   env: bullhorn_config["APPSIGNAL_ENV"]
 
+config :bullhorn, Bullhorn.Tracer, env: bullhorn_config["ENVIRONMENT"]
+
 config :bullhorn, Bullhorn.Mailer,
   api_key: bullhorn_config["MAILGUN_API_KEY"],
   domain: bullhorn_config["MAILGUN_DOMAIN"]

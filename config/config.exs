@@ -13,12 +13,23 @@ config :bullhorn,
 
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",
-  metadata: [:request_id, :user_id, :order_id],
+  metadata: [:request_id, :user_id, :order_id, :trace_id, :span_id],
   level: :info
+
+config :logger_json, :backend,
+  formatter: LoggerJSON.Formatters.DatadogLogger,
+  metadata: :all
 
 config :appsignal, :config,
   active: false,
   name: "Bullhorn"
+
+config :bullhorn, Bullhorn.Tracer,
+  service: :bullhorn,
+  adapter: SpandexDatadog.Adapter,
+  disabled?: true
+
+config :spandex, :decorators, tracer: Bullhorn.Tracer
 
 config :bullhorn, Bullhorn.Mailer, adapter: Bamboo.LocalAdapter
 

@@ -49,7 +49,6 @@ defmodule Bullhorn.Users do
   end
 
   defp send_user_email(email, user) do
-    Logger.metadata(recipient_id: user.id)
     Mailer.send(email)
   end
 end

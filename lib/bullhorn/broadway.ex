@@ -1,6 +1,7 @@
 defmodule Bullhorn.Broadway do
   use Broadway
   use Appsignal.Instrumentation.Decorators
+  use Spandex.Decorators
 
   require Logger
 
@@ -29,6 +30,7 @@ defmodule Bullhorn.Broadway do
 
   @impl true
   @decorate transaction(:queue)
+  @decorate trace()
   def handle_message(_, %Message{data: data} = message, _context) do
     bottle =
       data

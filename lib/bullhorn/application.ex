@@ -9,6 +9,7 @@ defmodule Bullhorn.Application do
 
   def start(_type, _args) do
     children = [
+      {SpandexDatadog.ApiServer, [http: HTTPoison, host: "127.0.0.1"]},
       {Bullhorn.Broadway, []}
     ]
 
