@@ -1,6 +1,7 @@
 defmodule Bullhorn.Broadway do
   use Broadway
   use Appsignal.Instrumentation.Decorators
+  use Spandex.Decorators
 
   require Logger
 
@@ -29,10 +30,8 @@ defmodule Bullhorn.Broadway do
 
   @impl true
   @decorate transaction(:queue)
+  @decorate trace(service: :bullhorn, type: :function)
   def handle_message(_, %Message{data: data} = message, _context) do
-    Tracer.start_trace("Bullhorn.Broadway.handle_message/3")
-    Tracer.update_span(service: :bullhorn, type: :function)
-
     bottle =
       data
       |> URI.decode()
@@ -41,11 +40,9 @@ defmodule Bullhorn.Broadway do
     Bottle.RequestId.read(:queue, bottle)
 
     with {:error, reason} <- notify_handler(bottle.resource) do
-      Tracer.span_error(%RuntimeError{message: reason}, Process.info(self(), :current_stacktrace))
+      Tracer.span_error(%RuntimeError{message: inspect(reason)}, nil)
       Logger.error(reason)
     end
-
-    Tracer.finish_trace()
 
     message
   end

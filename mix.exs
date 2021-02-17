@@ -41,7 +41,7 @@ defmodule Bullhorn.MixProject do
       {:plug, "~> 1.1"},
       {:saxy, "~> 1.1"},
       {:spandex, "~> 3.0.3"},
-      {:spandex_datadog, "~> 1.1.0"}
+      {:spandex_datadog, "== 1.0.0"}
     ]
   end
 end
