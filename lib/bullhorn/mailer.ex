@@ -5,7 +5,7 @@ defmodule Bullhorn.Mailer do
 
   require Logger
 
-  @decorate transaction(:email)
+  @decorate transaction(:mailgun)
   @decorate span(service: :mailgun, type: :web)
   def send(email) do
     Logger.debug("Sending email: #{email.subject}")
