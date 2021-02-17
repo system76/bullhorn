@@ -18,7 +18,7 @@ config :bullhorn,
 
 config :appsignal, :config,
   push_api_key: bullhorn_config["APPSIGNAL_PUSH_KEY"],
-  env: bullhorn_config["APPSIGNAL_ENVIRONMENT"]
+  env: bullhorn_config["APPSIGNAL_ENV"]
 
 config :bullhorn, Bullhorn.Tracer, env: bullhorn_config["DATADOG_ENVIRONMENT"]
 
