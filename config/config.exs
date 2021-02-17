@@ -29,6 +29,10 @@ config :bullhorn, Bullhorn.Tracer,
   adapter: SpandexDatadog.Adapter,
   disabled?: true
 
+config :bullhorn, SpandexDatadog.ApiServer,
+  http: HTTPoison,
+  host: "127.0.0.1"
+
 config :spandex, :decorators, tracer: Bullhorn.Tracer
 
 config :bullhorn, Bullhorn.Mailer, adapter: Bamboo.LocalAdapter
