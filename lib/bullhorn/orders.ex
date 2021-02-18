@@ -8,8 +8,6 @@ defmodule Bullhorn.Orders do
   alias Bullhorn.Mailer
 
   def tribble_failed(%TribbleFailed{order: order, type: failure_type}) do
-    Logger.metadata(order_id: order.id)
-
     order
     |> OrderEmails.assembly_failure(failure_type)
     |> Mailer.send()

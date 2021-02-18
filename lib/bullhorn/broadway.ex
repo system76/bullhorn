@@ -1,11 +1,12 @@
 defmodule Bullhorn.Broadway do
   use Broadway
   use Appsignal.Instrumentation.Decorators
+  use Spandex.Decorators
 
   require Logger
 
   alias Broadway.Message
-  alias Bullhorn.{Orders, Users}
+  alias Bullhorn.{Orders, Tracer, Users}
 
   def start_link(_opts) do
     producer_module = Application.fetch_env!(:bullhorn, :producer)
@@ -29,6 +30,7 @@ defmodule Bullhorn.Broadway do
 
   @impl true
   @decorate transaction(:queue)
+  @decorate trace(service: :bullhorn, type: :function)
   def handle_message(_, %Message{data: data} = message, _context) do
     bottle =
       data
@@ -38,6 +40,7 @@ defmodule Bullhorn.Broadway do
     Bottle.RequestId.read(:queue, bottle)
 
     with {:error, reason} <- notify_handler(bottle.resource) do
+      Tracer.span_error(%RuntimeError{message: inspect(reason)}, nil)
       Logger.error(reason)
     end
 
