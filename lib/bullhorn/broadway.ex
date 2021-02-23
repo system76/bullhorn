@@ -41,8 +41,10 @@ defmodule Bullhorn.Broadway do
 
     with {:error, reason} <- notify_handler(bottle.resource) do
       Tracer.span_error(%RuntimeError{message: inspect(reason)}, nil)
-      Logger.error(reason)
+      Logger.error(inspect(reason))
     end
+
+    Logger.metadata(order_id: nil, user_id: nil)
 
     message
   end
@@ -54,6 +56,10 @@ defmodule Bullhorn.Broadway do
 
   @impl true
   def handle_failed([failed_message], _context) do
+    Logger.error("Failed #{to_string(failed_message.__struct__)}",
+      message: inspect(failed_message)
+    )
+
     Appsignal.send_error(%RuntimeError{}, "Failed Broadway Message", [], %{}, nil, fn transaction ->
       Appsignal.Transaction.set_sample_data(transaction, "message", %{data: failed_message.data})
     end)
