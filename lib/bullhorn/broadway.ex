@@ -91,7 +91,7 @@ defmodule Bullhorn.Broadway do
     Users.two_factor_requested(message)
   end
 
-  defp notify_handler({:recovery_code_used, message}) do
+  defp notify_handler({:two_factor_recovery_code_used, message}) do
     Logger.metadata(user_id: message.user.id)
     Logger.info("Handling Recovery Code Used message")
     Users.recovery_code_used(message)
