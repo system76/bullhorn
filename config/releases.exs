@@ -13,7 +13,8 @@ config :bullhorn,
        username: bullhorn_config["RABBITMQ_USERNAME"],
        password: bullhorn_config["RABBITMQ_PASSWORD"],
        host: bullhorn_config["RABBITMQ_HOST"],
-       port: bullhorn_config["RABBITMQ_PORT"]
+       port: bullhorn_config["RABBITMQ_PORT"],
+       ssl_options: [verify: :verify_none]
      ]},
   phone_number: bullhorn_config["TWILIO_PHONE_NUMBER"]
 
