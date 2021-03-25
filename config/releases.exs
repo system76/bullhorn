@@ -7,12 +7,14 @@ bullhorn_config =
 
 config :bullhorn,
   producer:
-    {BroadwaySQS.Producer,
-     queue_url: bullhorn_config["SQS_QUEUE_URL"],
-     config: [
-       access_key_id: bullhorn_config["ACCESS_KEY_ID"],
-       secret_access_key: bullhorn_config["SECRET_ACCESS_KEY"],
-       region: bullhorn_config["SQS_QUEUE_REGION"]
+    {BroadwayRabbitMQ.Producer,
+     queue: bullhorn_config["RABBITMQ_QUEUE_NAME"],
+     connection: [
+       username: bullhorn_config["RABBITMQ_USERNAME"],
+       password: bullhorn_config["RABBITMQ_PASSWORD"],
+       host: bullhorn_config["RABBITMQ_HOST"],
+       port: bullhorn_config["RABBITMQ_PORT"],
+       ssl_options: [verify: :verify_none]
      ]},
   phone_number: bullhorn_config["TWILIO_PHONE_NUMBER"]
 

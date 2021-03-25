@@ -29,9 +29,10 @@ defmodule Bullhorn.MixProject do
   defp deps do
     [
       {:appsignal, "~> 1.0"},
+      {:amqp, "~> 2.0", override: true},
       {:bamboo, "~> 1.6"},
-      {:bottle, github: "system76/bottle", ref: "041d8ae"},
-      {:broadway_sqs, "~> 0.6.0"},
+      {:bottle, github: "system76/bottle", ref: "b3b78b6"},
+      {:broadway_rabbitmq, "~> 0.6.5"},
       {:credo, "~> 1.3", only: [:dev, :test]},
       {:decorator, "~> 1.2"},
       {:ex_twilio, "~> 0.8.2"},

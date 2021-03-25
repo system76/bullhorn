@@ -2,8 +2,8 @@ use Mix.Config
 
 config :bullhorn,
   producer:
-    {BroadwaySQS.Producer,
-     queue_url: "",
+    {BroadwayRabbitMQ.Producer,
+     queue: "",
      config: [
        access_key_id: "",
        secret_access_key: "",
