@@ -1,11 +1,12 @@
 defmodule Bullhorn.Broadway do
   use Broadway
   use Appsignal.Instrumentation.Decorators
+  use Spandex.Decorators
 
   require Logger
 
   alias Broadway.Message
-  alias Bullhorn.{Orders, Users}
+  alias Bullhorn.{Orders, Tracer, Users}
 
   def start_link(_opts) do
     producer_module = Application.fetch_env!(:bullhorn, :producer)
@@ -29,6 +30,7 @@ defmodule Bullhorn.Broadway do
 
   @impl true
   @decorate transaction(:queue)
+  @decorate trace(service: :bullhorn, type: :function)
   def handle_message(_, %Message{data: data} = message, _context) do
     bottle =
       data
@@ -38,8 +40,11 @@ defmodule Bullhorn.Broadway do
     Bottle.RequestId.read(:queue, bottle)
 
     with {:error, reason} <- notify_handler(bottle.resource) do
-      Logger.error(reason)
+      Tracer.span_error(%RuntimeError{message: inspect(reason)}, nil)
+      Logger.error(inspect(reason))
     end
+
+    Logger.metadata(order_id: nil, user_id: nil)
 
     message
   end
@@ -51,6 +56,10 @@ defmodule Bullhorn.Broadway do
 
   @impl true
   def handle_failed([failed_message], _context) do
+    Logger.error("Failed #{to_string(failed_message.__struct__)}",
+      message: inspect(failed_message)
+    )
+
     Appsignal.send_error(%RuntimeError{}, "Failed Broadway Message", [], %{}, nil, fn transaction ->
       Appsignal.Transaction.set_sample_data(transaction, "message", %{data: failed_message.data})
     end)
@@ -59,38 +68,43 @@ defmodule Bullhorn.Broadway do
   end
 
   defp notify_handler({:user_created, message}) do
-    Logger.debug("Handling User Created message")
+    Logger.metadata(user_id: message.user.id)
+    Logger.info("Handling User Created message")
     Users.created(message)
   end
 
   defp notify_handler({:password_changed, message}) do
-    Logger.debug("Handling Password Changed message")
+    Logger.metadata(user_id: message.user.id)
+    Logger.info("Handling Password Changed message")
     Users.password_changed(message)
   end
 
   defp notify_handler({:password_reset, message}) do
-    Logger.debug("Handling Password Reset message")
+    Logger.metadata(user_id: message.user.id)
+    Logger.info("Handling Password Reset message")
     Users.password_reset(message)
   end
 
   defp notify_handler({:two_factor_requested, message}) do
-    Logger.debug("Handling Two Factor message")
+    Logger.metadata(user_id: message.user.id)
+    Logger.info("Handling Two Factor message")
     Users.two_factor_requested(message)
   end
 
-  defp notify_handler({:recovery_code_used, message}) do
-    Logger.debug("Handling Recovery Code Used message")
+  defp notify_handler({:two_factor_recovery_code_used, message}) do
+    Logger.metadata(user_id: message.user.id)
+    Logger.info("Handling Recovery Code Used message")
     Users.recovery_code_used(message)
   end
 
   defp notify_handler({:tribble_failed, message}) do
-    Logger.debug("Handling Tribble Failed message")
+    Logger.metadata(order_id: message.order.id)
+    Logger.info("Handling Tribble Failed message")
     Orders.tribble_failed(message)
   end
 
-  defp notify_handler(_) do
-    Logger.debug("Ignoring message")
-
+  defp notify_handler({event, _message}) do
+    Logger.warn("Ignoring #{event} message")
     {:ok, :ignored}
   end
 end

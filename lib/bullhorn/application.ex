@@ -9,6 +9,7 @@ defmodule Bullhorn.Application do
 
   def start(_type, _args) do
     children = [
+      {SpandexDatadog.ApiServer, Application.get_env(:bullhorn, SpandexDatadog.ApiServer)},
       {Bullhorn.Broadway, []}
     ]
 
