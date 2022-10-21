@@ -1,14 +1,9 @@
-use Mix.Config
+import Config
+
+config :bullhorn, env: config_env()
 
 config :bullhorn,
-  producer:
-    {BroadwayRabbitMQ.Producer,
-     queue: "",
-     config: [
-       access_key_id: "",
-       secret_access_key: "",
-       region: "us-east-2"
-     ]},
+  producer: {BroadwayRabbitMQ.Producer, queue: "bullhorn", connection: []},
   phone_number: ""
 
 config :logger, :console,
@@ -41,4 +36,4 @@ config :ex_twilio,
   account_sid: "",
   auth_token: ""
 
-import_config "#{Mix.env()}.exs"
+import_config "#{config_env()}.exs"
