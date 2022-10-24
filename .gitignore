@@ -13,6 +13,8 @@ erl_crash.dump
 *.beam
 /config/*.secret.exs
 .elixir_ls/
+/log
+config/dev.exs
 
 ### Elixir Patch ###
 
