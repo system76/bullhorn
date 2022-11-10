@@ -5,7 +5,7 @@ defmodule Bullhorn.MixProject do
     [
       app: :bullhorn,
       version: "0.1.0",
-      elixir: "~> 1.10",
+      elixir: "~> 1.14.1",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
       releases: [
@@ -31,8 +31,8 @@ defmodule Bullhorn.MixProject do
       {:appsignal, "~> 1.0"},
       {:amqp, "~> 2.0", override: true},
       {:bamboo, "~> 1.6"},
-      {:bottle, github: "system76/bottle", ref: "b3b78b6"},
-      {:broadway_rabbitmq, "~> 0.6.5"},
+      {:bottle, github: "system76/bottle", ref: "668b84575af0910de797f39d061fac2619c98c03"},
+      {:broadway_rabbitmq, "~> 0.7.2"},
       {:credo, "~> 1.3", only: [:dev, :test]},
       {:decorator, "~> 1.2"},
       {:ex_twilio, "~> 0.8.2"},

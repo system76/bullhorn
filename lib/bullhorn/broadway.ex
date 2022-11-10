@@ -6,7 +6,7 @@ defmodule Bullhorn.Broadway do
   require Logger
 
   alias Broadway.Message
-  alias Bullhorn.{Orders, Tracer, Users}
+  alias Bullhorn.{Orders, Email.Templates, Tracer, Users}
 
   def start_link(_opts) do
     producer_module = Application.fetch_env!(:bullhorn, :producer)
@@ -101,6 +101,11 @@ defmodule Bullhorn.Broadway do
     Logger.metadata(order_id: message.order.id)
     Logger.info("Handling Tribble Failed message")
     Orders.tribble_failed(message)
+  end
+
+  defp notify_handler({:templated_email, message}) do
+    Logger.info("Handling templated message")
+    Templates.send_email(message)
   end
 
   defp notify_handler({event, _message}) do

@@ -1,4 +1,4 @@
-FROM elixir:1.10-alpine as build
+FROM elixir:1.14.1-alpine as build
 
 # Install deps
 RUN set -xe; \
@@ -31,12 +31,15 @@ RUN set -xe; \
     mix deps.compile --all; \
     mix release
 
-FROM alpine:3.16 as release
+FROM alpine:3.16.2 as release
 
 RUN set -xe; \
     apk add --update  --no-cache --virtual .runtime-deps \
         ca-certificates \
         libmcrypt \
+        libmcrypt-dev \
+        openssl \
+        libstdc++ \
         ncurses-libs \
         tzdata;
 

@@ -13,6 +13,8 @@ erl_crash.dump
 *.beam
 /config/*.secret.exs
 .elixir_ls/
+/log
+config/dev.exs
 
 ### Elixir Patch ###
 
@@ -54,5 +56,8 @@ tags
 
 # Coc configuration directory
 .vim
+
+# direnv
+.envrc
 
 # End of https://www.gitignore.io/api/elixir,linux,vim
