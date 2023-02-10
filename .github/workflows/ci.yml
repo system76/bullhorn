@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
 
     container:
-      image: elixir:1.14.1-alpine
+      image: elixir:1.14-slim
 
     services:
       mysql:
@@ -56,7 +56,7 @@ jobs:
     runs-on: ubuntu-latest
 
     container:
-      image: elixir:1.14.1-alpine
+      image: elixir:1.14-slim
 
     steps:
       - name: Checkout Code
@@ -84,7 +84,7 @@ jobs:
     runs-on: ubuntu-latest
 
     container:
-      image: elixir:1.14.1-alpine
+      image: elixir:1.14-slim
 
     steps:
       - name: Checkout Code
