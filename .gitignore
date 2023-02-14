@@ -57,6 +57,7 @@ tags
 # Coc configuration directory
 .vim
 
-# direnv
-.envrc
+# direnv, etc
+.env*
+
 
