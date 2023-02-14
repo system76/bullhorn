@@ -2,7 +2,10 @@ FROM elixir:1.14-slim as build
 
 # Install deps
 RUN set -xe; \
-    apt update && apt install -y \
+        apt update && \
+        TZ=Etc/UTC \
+        DEBIAN_FRONTEND=noninteractive \
+        apt install -y \
         ca-certificates \
         g++ \
         gcc \
@@ -34,7 +37,10 @@ RUN set -xe; \
 FROM ubuntu:20.04 as release
 
 RUN set -xe; \
-    apt update && apt install -y \
+        apt update && \
+        TZ=Etc/UTC \
+        DEBIAN_FRONTEND=noninteractive \
+        apt install -y \
         ca-certificates \
         libmcrypt-dev \
         openssl \
