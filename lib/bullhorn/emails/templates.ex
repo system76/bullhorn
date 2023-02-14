@@ -24,13 +24,13 @@ defmodule Bullhorn.Email.Templates do
         } = message
       ) do
     try do
-
-      email = new_email()
-      |> to(to)
-      |> from(from)
-      |> subject(subject)
-      |> MailgunHelper.template(name)
-      |> MailgunHelper.substitute_variables(vars)
+      email =
+        new_email()
+        |> to(to)
+        |> from(from)
+        |> subject(subject)
+        |> MailgunHelper.template(name)
+        |> MailgunHelper.substitute_variables(vars)
 
       source_attachments
       |> Enum.reduce(email, fn attachment, e ->
@@ -63,7 +63,4 @@ defmodule Bullhorn.Email.Templates do
     Logger.error(e)
     raise e
   end
-
-
-
 end

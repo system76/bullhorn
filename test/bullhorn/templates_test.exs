@@ -32,7 +32,13 @@ defmodule Bullhorn.TemplatesTest do
           email_from: "test@example.com",
           email_to: "user@example.com",
           subject: "test",
-          attachments: [TypedAttachment.new(type: "html-pdf", source: "<html><body><p>test</p></body></html>", file_name: "test.pdf")]
+          attachments: [
+            TypedAttachment.new(
+              type: "html-pdf",
+              source: "<html><body><p>test</p></body></html>",
+              file_name: "test.pdf"
+            )
+          ]
         )
       )
 
