@@ -1,8 +1,8 @@
-FROM elixir:1.14.1-alpine as build
+FROM elixir:1.14-slim as build
 
 # Install deps
 RUN set -xe; \
-    apk add --update  --no-cache --virtual .build-deps \
+    apt update && apt install -y \
         ca-certificates \
         g++ \
         gcc \
@@ -31,23 +31,22 @@ RUN set -xe; \
     mix deps.compile --all; \
     mix release
 
-FROM alpine:3.16.2 as release
+FROM ubuntu:20.04 as release
 
 RUN set -xe; \
-    apk add --update  --no-cache --virtual .runtime-deps \
+    apt update && apt install -y \
         ca-certificates \
-        libmcrypt \
         libmcrypt-dev \
         openssl \
-        libstdc++ \
-        ncurses-libs \
+        libssl-dev\
+        wkhtmltopdf \
         tzdata;
 
 # Create a `bullhorn` group & user
 # I've been told before it's generally a good practice to reserve ids < 1000 for the system
 RUN set -xe; \
-    addgroup -g 1000 -S bullhorn; \
-    adduser -u 1000 -S -h /bullhorn -s /bin/sh -G bullhorn bullhorn;
+    addgroup --gid 1000 --system bullhorn; \
+    adduser --uid 1000 --system --home /bullhorn --shell /bin/sh --ingroup bullhorn bullhorn;
 
 ARG APP_NAME=bullhorn
 
