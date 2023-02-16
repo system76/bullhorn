@@ -9,11 +9,13 @@ defmodule Bullhorn.TemplatesTest do
   @moduletag capture_log: true
 
   describe "valid send_email/1" do
+    {:ok, json} = Jason.encode(%{a: "1", b: "2"})
+
     {:ok, _} =
       Templates.send_email(
         TemplatedEmail.new(
           template_name: "template1",
-          form_variables: %{a: "1", b: "2"},
+          form_variables: json,
           email_from: "test@example.com",
           email_to: "user@example.com",
           subject: "test"
@@ -24,11 +26,13 @@ defmodule Bullhorn.TemplatesTest do
   end
 
   describe "valid send_email/1 with attachment" do
+    {:ok, json} = Jason.encode(%{a: "1", b: "2"})
+
     {:ok, _} =
       Templates.send_email(
         TemplatedEmail.new(
           template_name: "template1",
-          form_variables: %{a: "1", b: "2"},
+          form_variables: json,
           email_from: "test@example.com",
           email_to: "user@example.com",
           subject: "test",
