@@ -24,13 +24,16 @@ defmodule Bullhorn.Email.Templates do
         } = message
       ) do
     try do
+      {:ok, vars_map} = Jason.decode(vars)
+      |> IO.inspect(label: "vars_map")
+
       email =
         new_email()
         |> to(to)
         |> from(from)
         |> subject(subject)
         |> MailgunHelper.template(name)
-        |> MailgunHelper.substitute_variables(vars)
+        |> MailgunHelper.substitute_variables(vars_map)
 
       source_attachments
       |> Enum.reduce(email, fn attachment, e ->
