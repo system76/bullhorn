@@ -25,7 +25,6 @@ defmodule Bullhorn.Email.Templates do
       ) do
     try do
       {:ok, vars_map} = Jason.decode(vars)
-      |> IO.inspect(label: "vars_map")
 
       email =
         new_email()
