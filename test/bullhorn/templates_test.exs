@@ -14,6 +14,7 @@ defmodule Bullhorn.TemplatesTest do
     expect(HTTPoisonMock, :post, fn _, _, _, _ -> {:ok, %{status_code: 200}} end)
 
     {:ok, json} = Jason.encode(%{a: "1", b: "2"})
+
     {:ok, _} =
       Templates.send_email(
         TemplatedEmail.new(
@@ -24,13 +25,13 @@ defmodule Bullhorn.TemplatesTest do
           subject: "test"
         )
       )
-
   end
 
   describe "valid send_email/1 with attachment" do
     expect(HTTPoisonMock, :post, fn _, _, _, _ -> {:ok, %{status_code: 200}} end)
 
     {:ok, json} = Jason.encode(%{a: "1", b: "2"})
+
     {:ok, _} =
       Templates.send_email(
         TemplatedEmail.new(

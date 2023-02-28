@@ -35,7 +35,6 @@ defmodule Bullhorn.MailgunParamAdapter do
     end
   end
 
-
   def mailgun_body(%Email{from: from, to: to, subject: subject} = email) do
     %{
       from: prepare_recipient(from),
@@ -109,7 +108,7 @@ defmodule Bullhorn.MailgunParamAdapter do
     {
       "",
       attachment.data,
-      { "form-data", [{"name", ~s/"attachment"/}, {"filename", ~s/"#{attachment.filename}"/}] },
+      {"form-data", [{"name", ~s/"attachment"/}, {"filename", ~s/"#{attachment.filename}"/}]},
       []
     }
   end
