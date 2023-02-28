@@ -2,6 +2,8 @@ defmodule Bullhorn.TemplatesTest do
   use ExUnit.Case
   use Bamboo.Test
 
+  import Mox
+
   alias Bottle.Templates.V1.TemplatedEmail
   alias Bottle.Templates.V1.TypedAttachment
   alias Bullhorn.Email.Templates
@@ -9,8 +11,9 @@ defmodule Bullhorn.TemplatesTest do
   @moduletag capture_log: true
 
   describe "valid send_email/1" do
-    {:ok, json} = Jason.encode(%{a: "1", b: "2"})
+    expect(HTTPoisonMock, :post, fn _, _, _, _ -> {:ok, %{status_code: 200}} end)
 
+    {:ok, json} = Jason.encode(%{a: "1", b: "2"})
     {:ok, _} =
       Templates.send_email(
         TemplatedEmail.new(
@@ -22,12 +25,12 @@ defmodule Bullhorn.TemplatesTest do
         )
       )
 
-    assert_email_delivered_with(subject: "test")
   end
 
   describe "valid send_email/1 with attachment" do
-    {:ok, json} = Jason.encode(%{a: "1", b: "2"})
+    expect(HTTPoisonMock, :post, fn _, _, _, _ -> {:ok, %{status_code: 200}} end)
 
+    {:ok, json} = Jason.encode(%{a: "1", b: "2"})
     {:ok, _} =
       Templates.send_email(
         TemplatedEmail.new(
@@ -45,11 +48,11 @@ defmodule Bullhorn.TemplatesTest do
           ]
         )
       )
-
-    assert_email_delivered_with(subject: "test")
   end
 
-  describe "invalid send_email/1" do
+  describe "invalid send_email/1 is not sent" do
+    expect(HTTPoisonMock, :post, 0, fn _, _, _, _ -> {:ok, %{status_code: 200}} end)
+
     {:error, _} =
       Templates.send_email(
         TemplatedEmail.new(
@@ -60,7 +63,5 @@ defmodule Bullhorn.TemplatesTest do
           subject: "failure expected"
         )
       )
-
-    refute_email_delivered_with(subject: "test fail")
   end
 end

@@ -44,7 +44,8 @@ defmodule Bullhorn.MixProject do
       {:saxy, "~> 1.1"},
       {:spandex, "~> 3.0.3"},
       {:spandex_datadog, "~> 1.1"},
-      {:telemetry, "~> 0.4"}
+      {:telemetry, "~> 0.4"},
+      {:mox, "~> 1.0", only: :test},
     ]
   end
 end
