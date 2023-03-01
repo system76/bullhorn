@@ -10,7 +10,7 @@ on:
 
 jobs:
   Publish:
-    runs-on: ubuntu-latest
+    runs-on: debian:11.6-slim
 
     steps:
       - name: Configure

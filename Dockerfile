@@ -2,10 +2,9 @@ FROM elixir:1.14-slim as build
 
 # Install deps
 RUN set -xe; \
-        apt update && \
+        apt-get update && \
         TZ=Etc/UTC \
-        DEBIAN_FRONTEND=noninteractive \
-        apt install -y \
+        apt-get install -y \
         ca-certificates \
         g++ \
         gcc \
@@ -34,13 +33,12 @@ RUN set -xe; \
     mix deps.compile --all; \
     mix release
 
-FROM ubuntu:20.04 as release
+FROM debian:11.6-slim as release
 
 RUN set -xe; \
-        apt update && \
+        apt-get update && \
         TZ=Etc/UTC \
-        DEBIAN_FRONTEND=noninteractive \
-        apt install -y \
+        apt-get install -y \
         ca-certificates \
         libmcrypt-dev \
         openssl \
