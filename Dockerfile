@@ -6,12 +6,8 @@ RUN set -xe; \
         TZ=Etc/UTC \
         apt-get install -y \
         ca-certificates \
-        g++ \
-        gcc \
-        git \
-        make \
-        musl-dev \
-        tzdata;
+        build-essential  \
+        git ;
 
 # Use the standard /usr/local/src destination
 RUN mkdir -p /usr/local/src/bullhorn
@@ -40,18 +36,14 @@ RUN set -xe; \
         TZ=Etc/UTC \
         apt-get install -y \
         ca-certificates \
-        libmcrypt-dev \
+        libmcrypt4 \
         openssl \
-        libssl-dev\
-        wkhtmltopdf \
-        tzdata;
+        wkhtmltopdf;
 
 # Create a `bullhorn` group & user
 # I've been told before it's generally a good practice to reserve ids < 1000 for the system
 RUN set -xe; \
-    addgroup --gid 1000 --system bullhorn; \
-    adduser --uid 1000 --system --home /bullhorn --shell /bin/sh --ingroup bullhorn bullhorn;
-
+adduser --uid 1000 --system --home /bullhorn --shell /bin/sh --group bullhorn;
 ARG APP_NAME=bullhorn
 
 # Copy the release artifact and set `bullhorn` ownership
