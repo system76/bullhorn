@@ -3,17 +3,11 @@ FROM elixir:1.14-slim as build
 
 # Install deps
 RUN set -xe; \
-        apt update && \
-        TZ=Etc/UTC \
-        DEBIAN_FRONTEND=noninteractive \
-        apt install -y \
+        apt-get update && \
+        apt-get install -y \
         ca-certificates \
-        g++ \
-        gcc \
-        git \
-        make \
-        musl-dev \
-        tzdata;
+        build-essential  \
+        git ;
 
 # Use the standard /usr/local/src destination
 RUN mkdir -p /usr/local/src/bullhorn
@@ -35,26 +29,20 @@ RUN set -xe; \
     mix deps.compile --all; \
     mix release
 
-FROM ubuntu:20.04 as release
+FROM debian:11.6-slim as release
 
 RUN set -xe; \
-        apt update && \
-        TZ=Etc/UTC \
-        DEBIAN_FRONTEND=noninteractive \
-        apt install -y \
+        apt-get update && \
+        apt-get install -y \
         ca-certificates \
-        libmcrypt-dev \
+        libmcrypt4 \
         openssl \
-        libssl-dev\
-        wkhtmltopdf \
-        tzdata;
+        wkhtmltopdf;
 
 # Create a `bullhorn` group & user
 # I've been told before it's generally a good practice to reserve ids < 1000 for the system
 RUN set -xe; \
-    addgroup --gid 1000 --system bullhorn; \
-    adduser --uid 1000 --system --home /bullhorn --shell /bin/sh --ingroup bullhorn bullhorn;
-
+adduser --uid 1000 --system --home /bullhorn --shell /bin/sh --group bullhorn;
 ARG APP_NAME=bullhorn
 
 # Copy the release artifact and set `bullhorn` ownership

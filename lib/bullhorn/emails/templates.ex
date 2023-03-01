@@ -5,6 +5,7 @@ defmodule Bullhorn.Email.Templates do
 
   import Bamboo.Email
 
+  alias Bamboo.Attachment, as: BambooAttachment
   alias Bamboo.MailgunHelper
   alias Bottle.Templates.V1.TemplatedEmail
   alias Bottle.Templates.V1.TypedAttachment
@@ -24,15 +25,13 @@ defmodule Bullhorn.Email.Templates do
         } = message
       ) do
     try do
-      {:ok, vars_map} = Jason.decode(vars)
-
       email =
         new_email()
         |> to(to)
         |> from(from)
         |> subject(subject)
         |> MailgunHelper.template(name)
-        |> MailgunHelper.substitute_variables(vars_map)
+        |> put_private(:"t:variables", vars)
 
       source_attachments
       |> Enum.reduce(email, fn attachment, e ->
@@ -41,7 +40,7 @@ defmodule Bullhorn.Email.Templates do
       |> Mailer.send()
     rescue
       e ->
-        error = "TemplatedEmail cannot be applied from message: #{inspect(message)} with error #{inspect(e)}"
+        error = "error: #{inspect(e)} while sending TemplatedEmail: #{inspect(message)}"
         Logger.error(error)
         {:error, error}
     end
@@ -51,7 +50,7 @@ defmodule Bullhorn.Email.Templates do
     Logger.debug("converting html source to pdf... #{inspect(source)}")
     binary_pdf = PdfGenerator.generate_binary!(source)
     Logger.debug("done.")
-    %Bamboo.Attachment{filename: file_name, data: binary_pdf}
+    %BambooAttachment{filename: file_name, data: binary_pdf}
   end
 
   defp convert_attachment(%TypedAttachment{type: t}) do

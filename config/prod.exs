@@ -8,4 +8,4 @@ config :appsignal, :config, active: true
 
 config :bullhorn, Bullhorn.Tracer, disabled?: false
 
-config :bullhorn, Bullhorn.Mailer, adapter: Bamboo.MailgunAdapter
+config :bullhorn, Bullhorn.Mailer, adapter: Bullhorn.MailgunParamAdapter

@@ -8,59 +8,46 @@ defmodule Bullhorn.TemplatesTest do
 
   @moduletag capture_log: true
 
-  describe "valid send_email/1" do
-    {:ok, json} = Jason.encode(%{a: "1", b: "2"})
+  describe "send_email/1" do
+    test "valid send_email/1" do
+      {:ok, json} = Jason.encode(%{a: "1", b: "2"})
 
-    {:ok, _} =
-      Templates.send_email(
-        TemplatedEmail.new(
-          template_name: "template1",
-          form_variables: json,
-          email_from: "test@example.com",
-          email_to: "user@example.com",
-          subject: "test"
+      {:ok, _} =
+        Templates.send_email(
+          TemplatedEmail.new(
+            template_name: "template1",
+            form_variables: json,
+            email_from: "test@example.com",
+            email_to: "user@example.com",
+            subject: "test"
+          )
         )
-      )
 
-    assert_email_delivered_with(subject: "test")
-  end
+      assert_email_delivered_with(subject: "test")
+    end
 
-  describe "valid send_email/1 with attachment" do
-    {:ok, json} = Jason.encode(%{a: "1", b: "2"})
+    test "valid send_email/1 with attachment" do
+      {:ok, json} = Jason.encode(%{a: "1", b: "2"})
 
-    {:ok, _} =
-      Templates.send_email(
-        TemplatedEmail.new(
-          template_name: "template1",
-          form_variables: json,
-          email_from: "test@example.com",
-          email_to: "user@example.com",
-          subject: "test",
-          attachments: [
-            TypedAttachment.new(
-              type: "html-pdf",
-              source: "<html><body><p>test</p></body></html>",
-              file_name: "test.pdf"
-            )
-          ]
+      {:ok, _} =
+        Templates.send_email(
+          TemplatedEmail.new(
+            template_name: "template1",
+            form_variables: json,
+            email_from: "test@example.com",
+            email_to: "user@example.com",
+            subject: "test",
+            attachments: [
+              TypedAttachment.new(
+                type: "html-pdf",
+                source: "<html><body><p>test</p></body></html>",
+                file_name: "test.pdf"
+              )
+            ]
+          )
         )
-      )
 
-    assert_email_delivered_with(subject: "test")
-  end
-
-  describe "invalid send_email/1" do
-    {:error, _} =
-      Templates.send_email(
-        TemplatedEmail.new(
-          template_name: "template1",
-          form_variables: 123,
-          email_from: "test@example.com",
-          email_to: "user@example.com",
-          subject: "failure expected"
-        )
-      )
-
-    refute_email_delivered_with(subject: "test fail")
+      assert_email_delivered_with(subject: "test")
+    end
   end
 end
