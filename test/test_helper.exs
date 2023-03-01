@@ -3,5 +3,3 @@ if System.get_env("CI") == "true" do
 end
 
 ExUnit.start()
-
-Mox.defmock(HTTPoisonMock, for: HTTPoison.Base)
