@@ -115,8 +115,7 @@ defmodule Bullhorn.MailgunParamAdapter do
 
   defp prepare_recipients(recipients) do
     recipients
-    |> Enum.map(&prepare_recipient(&1))
-    |> Enum.join(",")
+    |> Enum.map_join(",", &prepare_recipient(&1))
   end
 
   defp prepare_recipient({nil, address}), do: address
