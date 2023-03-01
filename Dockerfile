@@ -3,7 +3,6 @@ FROM elixir:1.14-slim as build
 # Install deps
 RUN set -xe; \
         apt-get update && \
-        TZ=Etc/UTC \
         apt-get install -y \
         ca-certificates \
         build-essential  \
@@ -33,7 +32,6 @@ FROM debian:11.6-slim as release
 
 RUN set -xe; \
         apt-get update && \
-        TZ=Etc/UTC \
         apt-get install -y \
         ca-certificates \
         libmcrypt4 \
