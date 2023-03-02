@@ -42,6 +42,7 @@ defmodule Bullhorn.MailgunParamAdapter do
       subject: subject
     }
     |> put_attachments(email)
+    |> put_headers(email)
     |> add_params(email)
     |> encode_body()
   end
@@ -121,4 +122,10 @@ defmodule Bullhorn.MailgunParamAdapter do
   defp prepare_recipient({nil, address}), do: address
   defp prepare_recipient({"", address}), do: address
   defp prepare_recipient({name, address}), do: "#{name} <#{address}>"
+
+  defp put_headers(body, %Email{headers: headers}) do
+    Enum.reduce(headers, body, fn {key, value}, acc ->
+      Map.put(acc, :"h:#{key}", value)
+    end)
+  end
 end
