@@ -1,15 +1,12 @@
-FROM elixir:1.14.1-alpine as build
+FROM elixir:1.14-slim as build
 
 # Install deps
 RUN set -xe; \
-    apk add --update  --no-cache --virtual .build-deps \
+        apt-get update && \
+        apt-get install -y \
         ca-certificates \
-        g++ \
-        gcc \
-        git \
-        make \
-        musl-dev \
-        tzdata;
+        build-essential  \
+        git ;
 
 # Use the standard /usr/local/src destination
 RUN mkdir -p /usr/local/src/bullhorn
@@ -31,24 +28,20 @@ RUN set -xe; \
     mix deps.compile --all; \
     mix release
 
-FROM alpine:3.16.2 as release
+FROM debian:11.6-slim as release
 
 RUN set -xe; \
-    apk add --update  --no-cache --virtual .runtime-deps \
+        apt-get update && \
+        apt-get install -y \
         ca-certificates \
-        libmcrypt \
-        libmcrypt-dev \
+        libmcrypt4 \
         openssl \
-        libstdc++ \
-        ncurses-libs \
-        tzdata;
+        wkhtmltopdf;
 
 # Create a `bullhorn` group & user
 # I've been told before it's generally a good practice to reserve ids < 1000 for the system
 RUN set -xe; \
-    addgroup -g 1000 -S bullhorn; \
-    adduser -u 1000 -S -h /bullhorn -s /bin/sh -G bullhorn bullhorn;
-
+adduser --uid 1000 --system --home /bullhorn --shell /bin/sh --group bullhorn;
 ARG APP_NAME=bullhorn
 
 # Copy the release artifact and set `bullhorn` ownership
@@ -75,7 +68,8 @@ ENV \
     VERSION="${VERSION}" \
     MIX_APP="bullhorn" \
     MIX_ENV="prod" \
-    SHELL="/bin/bash"
+    SHELL="/bin/bash" \
+    LANG="C.UTF-8"
 
 # Drop down to our unprivileged `bullhorn` user
 USER bullhorn

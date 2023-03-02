@@ -57,7 +57,7 @@ tags
 # Coc configuration directory
 .vim
 
-# direnv
-.envrc
+# direnv, etc
+.env*
 
-# End of https://www.gitignore.io/api/elixir,linux,vim
+

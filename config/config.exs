@@ -30,7 +30,9 @@ config :bullhorn, SpandexDatadog.ApiServer,
 
 config :spandex, :decorators, tracer: Bullhorn.Tracer
 
-config :bullhorn, Bullhorn.Mailer, adapter: Bamboo.LocalAdapter
+config :bullhorn, Bullhorn.Mailer,
+  adapter: Bamboo.LocalAdapter,
+  http: HTTPoison
 
 config :ex_twilio,
   account_sid: "",
