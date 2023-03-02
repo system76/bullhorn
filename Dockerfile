@@ -1,6 +1,5 @@
 FROM elixir:1.14-slim as build
 
-
 # Install deps
 RUN set -xe; \
         apt-get update && \
