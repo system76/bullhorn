@@ -68,7 +68,8 @@ ENV \
     VERSION="${VERSION}" \
     MIX_APP="bullhorn" \
     MIX_ENV="prod" \
-    SHELL="/bin/bash"
+    SHELL="/bin/bash" \
+    LANG="C.UTF-8"
 
 # Drop down to our unprivileged `bullhorn` user
 USER bullhorn
