@@ -53,5 +53,21 @@ defmodule Bullhorn.Emails.UserEmails do
     |> MailgunHelper.substitute_variables("codes_remaining", codes_remaining)
   end
 
+  def account_verification(%{email: email} = user, verification_url) do
+    fields_for_email = [:email, :first_name, :last_name]
+
+    user_variables =
+      user
+      |> Map.take(fields_for_email)
+      |> Map.put(:verify_url, verification_url)
+
+    new_email()
+    |> to({full_name(user), email})
+    |> from("no-reply@system76.com")
+    |> subject("Verify your System76 account")
+    |> MailgunHelper.template("account_verification")
+    |> MailgunHelper.substitute_variables("user", user_variables)
+  end
+
   defp full_name(%{first_name: first, last_name: last}), do: String.trim("#{first} #{last}")
 end
