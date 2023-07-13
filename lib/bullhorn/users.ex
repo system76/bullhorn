@@ -10,7 +10,8 @@ defmodule Bullhorn.Users do
     PasswordReset,
     TwoFactorRequested,
     TwoFactorRecoveryCodeUsed,
-    UserCreated
+    UserCreated,
+    Verification
   }
 
   alias Bullhorn.Emails.UserEmails
@@ -45,6 +46,12 @@ defmodule Bullhorn.Users do
   def recovery_code_used(%TwoFactorRecoveryCodeUsed{codes_remaining: remaining, recovery_code: used_code, user: user}) do
     user
     |> UserEmails.recovery_code_used(used_code, remaining)
+    |> send_user_email()
+  end
+
+  def verify_account(%Verification{user: user, verification_url: verification_url}) do
+    user
+    |> UserEmails.account_verification(verification_url)
     |> send_user_email()
   end
 
