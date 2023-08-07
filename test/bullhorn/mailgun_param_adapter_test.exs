@@ -18,7 +18,7 @@ defmodule Bullhorn.MailgunParamAdapterTest do
         )
         |> MailgunParamAdapter.mailgun_body()
 
-      assert request_body == "from=source%40example.com&subject=test+subject&to=destination%40example.com"
+      assert request_body == "to=destination%40example.com&from=source%40example.com&subject=test+subject"
     end
 
     test "builds with attachments" do
@@ -35,9 +35,9 @@ defmodule Bullhorn.MailgunParamAdapterTest do
       assert request_body ==
                {:multipart,
                 [
+                  {"to", "destination@example.com"},
                   {"from", "source@example.com"},
                   {"subject", "test subject"},
-                  {"to", "destination@example.com"},
                   {"", "data", {"form-data", [{"name", "\"attachment\""}, {"filename", "\"test file\""}]}, []}
                 ]}
     end
@@ -54,7 +54,7 @@ defmodule Bullhorn.MailgunParamAdapterTest do
         |> MailgunParamAdapter.mailgun_body()
 
       assert request_body ==
-               "from=source%40example.com&h%3AX-Mailgun-Variables=%7B%22first_name%22%3A%22Name%22%7D&subject=email+with+header+vars&to=destination%40example.com"
+               "to=destination%40example.com&from=source%40example.com&h%3AX-Mailgun-Variables=%7B%22first_name%22%3A%22Name%22%7D&subject=email+with+header+vars"
     end
   end
 end
