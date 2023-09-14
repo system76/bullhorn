@@ -108,6 +108,12 @@ defmodule Bullhorn.Broadway do
     Templates.send_email(message)
   end
 
+  defp notify_handler({:verification, message}) do
+    Logger.metadata(user_id: message.user.id)
+    Logger.info("Handling Account Verification message")
+    Users.verify_account(message)
+  end
+
   defp notify_handler({event, _message}) do
     Logger.warn("Ignoring #{event} message")
     {:ok, :ignored}
