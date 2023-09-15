@@ -23,7 +23,7 @@ defmodule Bullhorn.Twilio do
 
     twiml = """
     <Response>
-      <Say loop="5" voice="woman">
+      <Say loop="3" voice="woman">
         Hello. Your System76 security code is #{spaced_out_token}.
       </Say>
     </Response>
