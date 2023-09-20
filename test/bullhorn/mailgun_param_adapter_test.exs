@@ -38,7 +38,11 @@ defmodule Bullhorn.MailgunParamAdapterTest do
       assert Enum.member?(body_params, {"to", "destination@example.com"})
       assert Enum.member?(body_params, {"from", "source@example.com"})
       assert Enum.member?(body_params, {"subject", "test subject"})
-      assert Enum.member?(body_params, {"", "data", {"form-data", [{"name", "\"attachment\""}, {"filename", "\"test file\""}]}, []})
+
+      assert Enum.member?(
+               body_params,
+               {"", "data", {"form-data", [{"name", "\"attachment\""}, {"filename", "\"test file\""}]}, []}
+             )
     end
 
     test "builds with headers" do
