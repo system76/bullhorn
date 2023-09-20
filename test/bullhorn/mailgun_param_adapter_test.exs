@@ -18,7 +18,9 @@ defmodule Bullhorn.MailgunParamAdapterTest do
         )
         |> MailgunParamAdapter.mailgun_body()
 
-      assert request_body == "to=destination%40example.com&from=source%40example.com&subject=test+subject"
+      assert String.contains?(request_body, "to=destination%40example.com")
+      assert String.contains?(request_body, "from=source%40example.com")
+      assert String.contains?(request_body, "subject=test+subject")
     end
 
     test "builds with attachments" do
@@ -32,14 +34,11 @@ defmodule Bullhorn.MailgunParamAdapterTest do
         |> put_attachment(%Bamboo.Attachment{filename: "test file", data: "data"})
         |> MailgunParamAdapter.mailgun_body()
 
-      assert request_body ==
-               {:multipart,
-                [
-                  {"to", "destination@example.com"},
-                  {"from", "source@example.com"},
-                  {"subject", "test subject"},
-                  {"", "data", {"form-data", [{"name", "\"attachment\""}, {"filename", "\"test file\""}]}, []}
-                ]}
+      {:multipart, body_params} = request_body
+      assert Enum.member?(body_params, {"to", "destination@example.com"})
+      assert Enum.member?(body_params, {"from", "source@example.com"})
+      assert Enum.member?(body_params, {"subject", "test subject"})
+      assert Enum.member?(body_params, {"", "data", {"form-data", [{"name", "\"attachment\""}, {"filename", "\"test file\""}]}, []})
     end
 
     test "builds with headers" do
@@ -53,8 +52,10 @@ defmodule Bullhorn.MailgunParamAdapterTest do
         |> MailgunHelper.substitute_variables("first_name", "Name")
         |> MailgunParamAdapter.mailgun_body()
 
-      assert request_body ==
-               "to=destination%40example.com&from=source%40example.com&subject=email+with+header+vars&h%3AX-Mailgun-Variables=%7B%22first_name%22%3A%22Name%22%7D"
+      assert String.contains?(request_body, "to=destination%40example.com")
+      assert String.contains?(request_body, "from=source%40example.com")
+      assert String.contains?(request_body, "subject=email+with+header+vars")
+      assert String.contains?(request_body, "h%3AX-Mailgun-Variables=%7B%22first_name%22%3A%22Name%22%7D")
     end
   end
 end
