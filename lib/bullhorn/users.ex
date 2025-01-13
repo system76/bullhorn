@@ -43,6 +43,12 @@ defmodule Bullhorn.Users do
     Twilio.deliver_voice_two_factor_token(user, token)
   end
 
+  def two_factor_requested(%TwoFactorRequested{token: token, user: user, method: :TWO_FACTOR_METHOD_EMAIL}) do
+    user
+    |> UserEmails.deliver_email_two_factor_token(user, token)
+    |> send_user_email()
+  end
+
   def recovery_code_used(%TwoFactorRecoveryCodeUsed{codes_remaining: remaining, recovery_code: used_code, user: user}) do
     user
     |> UserEmails.recovery_code_used(used_code, remaining)

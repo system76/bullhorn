@@ -42,6 +42,23 @@ defmodule Bullhorn.Emails.UserEmails do
     |> MailgunHelper.substitute_variables("first_name", first_name)
   end
 
+  def deliver_email_two_factor_token(%{email: email, first_name: first_name} = user, token) do
+    spaced_out_token =
+      token
+      |> String.upcase()
+      |> String.split("")
+      |> Enum.join(". ")
+
+    new_email()
+    |> to({full_name(user), email})
+    |> from("no-reply@system76.com")
+    |> subject("Your System76 verification code")
+    |> MailgunHelper.template("deliver_email_two_factor_token")
+    |> MailgunHelper.substitute_variables("first_name", first_name)
+    |> MailgunHelper.substitute_variables("two_factor_token", spaced_out_token)
+  end
+
+
   def recovery_code_used(%{email: email, first_name: first_name} = user, used_code, codes_remaining) do
     new_email()
     |> to({full_name(user), email})
