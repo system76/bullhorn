@@ -45,7 +45,7 @@ defmodule Bullhorn.Users do
 
   def two_factor_requested(%TwoFactorRequested{token: token, user: user, method: :TWO_FACTOR_METHOD_EMAIL}) do
     user
-    |> UserEmails.deliver_email_two_factor_token(user, token)
+    |> UserEmails.deliver_email_two_factor_token(token)
     |> send_user_email()
   end
 
