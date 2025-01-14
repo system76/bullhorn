@@ -64,11 +64,11 @@ jobs:
           image: ${{ steps.publish.outputs.image }}
 
       - name: Deploy
-        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v2
         with:
           task-definition: ${{ steps.template.outputs.task-definition }}
           service: staging-genesis76-bullhorn
           cluster: genesis76-us-east-2
-          wait-for-service-stability: true
+          wait-for-service-stability: true        
 
           
