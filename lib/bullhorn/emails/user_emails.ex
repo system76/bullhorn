@@ -46,8 +46,6 @@ defmodule Bullhorn.Emails.UserEmails do
     spaced_out_token =
       token
       |> String.upcase()
-      |> String.split("")
-      |> Enum.join(". ")
 
     fields_for_email = [:email, :first_name, :last_name]
 
