@@ -8,6 +8,37 @@ RUN set -xe; \
         build-essential  \
         git ;
 
+# RUN set -xe; \
+#     apt-get update && \
+#     apt-get install -y \
+#     wget \
+#     ca-certificates \
+#     build-essential \
+#     manpages-dev \
+#     libtool \
+#     autoconf \
+#     automake \    
+#     gcc \
+#     g++ \
+#     libc6-dev\    
+#     git \
+#     gawk \
+#     bison \
+#     python3 \
+#     python3-pip && \
+#     wget http://ftp.gnu.org/gnu/libc/glibc-2.34.tar.gz && \
+#     tar -xvzf glibc-2.34.tar.gz && \
+#     cd glibc-2.34 && \
+#     mkdir build && \
+#     cd build && \
+#     CFLAGS="-O2" CXXFLAGS="-O2" ../configure --prefix=/opt/glibc-2.34 && \
+#     make -j$(nproc) && \
+#     make install && \
+#     ldconfig /opt/glibc-2.34/lib
+
+
+ENV LD_LIBRARY_PATH="/opt/glibc-2.34/lib:$LD_LIBRARY_PATH"
+
 # Use the standard /usr/local/src destination
 RUN mkdir -p /usr/local/src/bullhorn
 
@@ -28,7 +59,7 @@ RUN set -xe; \
     mix deps.compile --all; \
     mix release
 
-FROM debian:11.6-slim as release
+FROM debian:12-slim as release
 
 RUN set -xe; \
         apt-get update && \

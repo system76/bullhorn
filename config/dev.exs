@@ -9,7 +9,7 @@ config :bullhorn,
      on_failure: :reject_and_requeue,
      connection: [
        username: "bullhorn",
-       password: System.get_env("RMQ_PASSWORD"),
+       password: System.get_env("RMQ_PASSWORD", "system76"),
        host: System.get_env("RMQ_HOST", "localhost"),
        port: System.get_env("RMQ_PORT", "5672")
      ]}
