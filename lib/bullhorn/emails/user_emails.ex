@@ -42,20 +42,26 @@ defmodule Bullhorn.Emails.UserEmails do
     |> MailgunHelper.substitute_variables("first_name", first_name)
   end
 
-  def deliver_email_two_factor_token(%{email: email, first_name: first_name} = user, token) do
+  def deliver_email_two_factor_token(%{email: email} = user, token) do
     spaced_out_token =
       token
       |> String.upcase()
       |> String.split("")
       |> Enum.join(". ")
 
+    fields_for_email = [:email, :first_name, :last_name]
+
+    user_variables =
+      user
+      |> Map.take(fields_for_email)
+      |> Map.put(:two_factor_token, spaced_out_token)
+
     new_email()
     |> to({full_name(user), email})
     |> from("no-reply@system76.com")
-    |> subject("Your System76 verification code")
+    |> subject("Your System76 login verification code")
     |> MailgunHelper.template("deliver_email_two_factor_token")
-    |> MailgunHelper.substitute_variables("first_name", first_name)
-    |> MailgunHelper.substitute_variables("two_factor_token", spaced_out_token)
+    |> MailgunHelper.substitute_variables("user", user_variables)
   end
 
 
