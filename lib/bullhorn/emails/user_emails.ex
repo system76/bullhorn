@@ -58,7 +58,6 @@ defmodule Bullhorn.Emails.UserEmails do
     |> MailgunHelper.substitute_variables("two_factor_token", spaced_out_token)
   end
 
-
   def recovery_code_used(%{email: email, first_name: first_name} = user, used_code, codes_remaining) do
     new_email()
     |> to({full_name(user), email})
