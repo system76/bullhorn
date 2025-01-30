@@ -62,7 +62,6 @@ defmodule Bullhorn.Emails.UserEmails do
     |> MailgunHelper.substitute_variables("user", user_variables)
   end
 
-
   def recovery_code_used(%{email: email, first_name: first_name} = user, used_code, codes_remaining) do
     new_email()
     |> to({full_name(user), email})
