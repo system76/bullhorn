@@ -8,6 +8,9 @@ RUN set -xe; \
         build-essential  \
         git ;
 
+
+ENV LD_LIBRARY_PATH="/opt/glibc-2.34/lib:$LD_LIBRARY_PATH"
+
 # Use the standard /usr/local/src destination
 RUN mkdir -p /usr/local/src/bullhorn
 
@@ -28,7 +31,7 @@ RUN set -xe; \
     mix deps.compile --all; \
     mix release
 
-FROM debian:11.6-slim as release
+FROM debian:12-slim as release
 
 RUN set -xe; \
         apt-get update && \
