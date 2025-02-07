@@ -31,7 +31,7 @@ defmodule Bullhorn.MixProject do
       {:appsignal, "~> 1.0"},
       {:amqp, "~> 2.0", override: true},
       {:bamboo, "~> 1.6"},
-      {:bottle, github: "system76/bottle", ref: "ea81e3024965a2b8e72b1f345c040d4e209ef259"},
+      {:bottle, github: "system76/bottle", ref: "a470810a218b697b239bb8f1b7d8ffc22342f6c7"},
       {:broadway_rabbitmq, "~> 0.7.2"},
       {:credo, "~> 1.3", only: [:dev, :test]},
       {:decorator, "~> 1.2"},
