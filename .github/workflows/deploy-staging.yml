@@ -69,4 +69,4 @@ jobs:
           task-definition: ${{ steps.template.outputs.task-definition }}
           service: staging-genesis76-bullhorn
           cluster: genesis76-us-east-2
-          wait-for-service-stability: true
+          wait-for-service-stability: true        
