@@ -29,7 +29,7 @@ defmodule Bullhorn.MixProject do
   defp deps do
     [
       {:appsignal, "~> 1.0"},
-      {:amqp, "~> 2.0", override: true},
+      {:amqp, "~> 4.0.0", override: true},
       {:bamboo, "~> 1.6"},
       {:bottle, github: "system76/bottle", ref: "858da5138e9bedaf8155dd84dd2114387d1593a6"},
       {:broadway_rabbitmq, "~> 0.7.2"},
