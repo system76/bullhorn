@@ -5,7 +5,7 @@ defmodule Bullhorn.MixProject do
     [
       app: :bullhorn,
       version: "0.1.0",
-      elixir: "~> 1.14.1",
+      elixir: "~> 1.18.2",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
       releases: [
@@ -28,24 +28,26 @@ defmodule Bullhorn.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:appsignal, "~> 1.0"},
+      {:appsignal, "~> 2.13.3"},
       {:amqp, "~> 4.0.0", override: true},
-      {:bamboo, "~> 1.6"},
-      {:bottle, github: "system76/bottle", ref: "858da5138e9bedaf8155dd84dd2114387d1593a6"},
-      {:broadway_rabbitmq, "~> 0.7.2"},
-      {:credo, "~> 1.3", only: [:dev, :test]},
-      {:decorator, "~> 1.2"},
-      {:ex_twilio, "~> 0.8.2"},
-      {:hackney, "~> 1.16"},
-      {:jason, "~> 1.2", override: true},
-      {:logger_json, github: "Nebo15/logger_json", ref: "8e4290a"},
-      {:pdf_generator, "~> 0.6"},
-      {:plug, "~> 1.1"},
-      {:saxy, "~> 1.1"},
-      {:spandex, "~> 3.0.3"},
-      {:spandex_datadog, "~> 1.1"},
-      {:telemetry, "~> 0.4"},
-      {:mox, "~> 1.0", only: :test}
+      {:ranch, "~> 2.1", override: true},
+      {:bamboo, "~> 2.3.1"},
+      {:bottle, github: "system76/bottle", ref: "a615105c7f814c305ccea41c3496732a06ca757d"},
+      {:broadway_rabbitmq, "~> 0.8.2"},
+      {:credo, "~> 1.7.11", only: [:dev, :test]},
+      {:decorator, "~> 1.4"},
+      {:ex_twilio, "~> 0.10"},
+      {:hackney, "~> 1.20.1"},
+      {:jason, "~> 1.4.4", override: true},
+      {:logger_json, "~> 6.2.1"},
+      {:pdf_generator, "~> 0.6.2"},
+      {:plug, "~> 1.16.1"},
+      {:ranch, "~> 2.1", override: true},
+      {:saxy, "~> 1.6"},
+      {:spandex, "~> 3.2"},
+      {:spandex_datadog, "~> 1.4"},
+      {:telemetry, "~> 1.3"},
+      {:mox, "~> 1.2", only: :test}
     ]
   end
 end
