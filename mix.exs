@@ -42,7 +42,6 @@ defmodule Bullhorn.MixProject do
       {:logger_json, "~> 6.2.1"},
       {:pdf_generator, "~> 0.6.2"},
       {:plug, "~> 1.16.1"},
-      {:ranch, "~> 2.1", override: true},
       {:saxy, "~> 1.6"},
       {:spandex, "~> 3.2"},
       {:spandex_datadog, "~> 1.4"},
