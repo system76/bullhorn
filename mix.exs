@@ -39,7 +39,7 @@ defmodule Bullhorn.MixProject do
       {:ex_twilio, "~> 0.10"},
       {:hackney, "~> 1.20.1"},
       {:jason, "~> 1.4.4", override: true},
-      {:logger_json, "~> 6.2.1"},
+      {:logger_json, "~> 5.1.4"},
       {:pdf_generator, "~> 0.6.2"},
       {:plug, "~> 1.16.1"},
       {:saxy, "~> 1.6"},
