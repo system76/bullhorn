@@ -32,7 +32,7 @@ defmodule Bullhorn.MixProject do
       {:amqp, "~> 4.0.0", override: true},
       {:ranch, "~> 2.1", override: true},
       {:bamboo, "~> 2.3.1"},
-      {:bottle, github: "system76/bottle", ref: "a615105c7f814c305ccea41c3496732a06ca757d"},
+      {:bottle, github: "system76/bottle", ref: "465b429c7b341eb92dcfb7f210170a1e5265da41"},
       {:broadway_rabbitmq, "~> 0.8.2"},
       {:credo, "~> 1.7.11", only: [:dev, :test]},
       {:decorator, "~> 1.4"},
@@ -45,7 +45,7 @@ defmodule Bullhorn.MixProject do
       {:saxy, "~> 1.6"},
       {:spandex, "~> 3.2"},
       {:spandex_datadog, "~> 1.4"},
-      {:telemetry, "~> 1.3"},
+      {:telemetry, "~> 1.0"},
       {:mox, "~> 1.2", only: :test}
     ]
   end
