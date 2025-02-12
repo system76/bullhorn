@@ -52,7 +52,6 @@ defmodule Bullhorn.Emails.UserEmails do
     new_email()
     |> to({full_name(user), email})
     |> from("no-reply@system76.com")
-
     |> subject("Your System76 verification code")
     |> MailgunHelper.template("deliver_email_two_factor_token")
     |> MailgunHelper.substitute_variables("first_name", first_name)
