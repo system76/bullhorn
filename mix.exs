@@ -5,7 +5,7 @@ defmodule Bullhorn.MixProject do
     [
       app: :bullhorn,
       version: "0.1.0",
-      elixir: "~> 1.12",
+      elixir: "~> 1.17.3",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
       releases: [
@@ -45,7 +45,7 @@ defmodule Bullhorn.MixProject do
       {:saxy, "~> 1.6"},
       {:spandex, "~> 3.2"},
       {:spandex_datadog, "~> 1.4"},
-      {:telemetry, "~> 1.0"},
+      {:telemetry, "~> 1.3"},
       {:mox, "~> 1.2", only: :test}
     ]
   end
