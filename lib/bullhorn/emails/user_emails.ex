@@ -45,9 +45,8 @@ defmodule Bullhorn.Emails.UserEmails do
   def deliver_email_two_factor_token(%{email: email, first_name: first_name} = user, token) do
     spaced_out_token =
       token
-      |> String.upcase()
-      |> String.split("")
-      |> Enum.join(". ")
+      |> String.replace(". ", "")
+      |> String.trim()
 
     new_email()
     |> to({full_name(user), email})
