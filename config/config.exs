@@ -11,7 +11,7 @@ config :bullhorn,
 
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",
-  metadata: [:request_id, :user_id, :order_id, :trace_id, :span_id, :message],
+  metadata: [:request_id, :user_id, :order_id, :trace_id, :span_id],
   level: :info
 
 config :logger_json, :backend,

@@ -60,20 +60,9 @@ defmodule Bullhorn.Broadway do
       message: inspect(failed_message)
     )
 
-    Appsignal.send_error(
-      %RuntimeError{},
-      "Failed Broadway Message",
-      %{data: failed_message.data}
-    )
-    span = Appsignal.Tracer.current_span()
-
-    if span do
-      Appsignal.Span.set_sample_data(span, "message", %{data: failed_message.data})
-    end
-
-    # Appsignal.send_error(%RuntimeError{}, "Failed Broadway Message", [], %{}, nil, fn transaction ->
-    #   Appsignal.Transaction.set_sample_data(transaction, "message", %{data: failed_message.data})
-    # end)
+    Appsignal.send_error(%RuntimeError{}, "Failed Broadway Message", [], %{}, nil, fn transaction ->
+      Appsignal.Transaction.set_sample_data(transaction, "message", %{data: failed_message.data})
+    end)
 
     [failed_message]
   end
