@@ -5,8 +5,7 @@ config :bullhorn, env: config_env()
 config :bullhorn,
   producer: {BroadwayRabbitMQ.Producer,
     queue: "bullhorn",
-    connection: [],
-    on_failure: :reject_and_requeue
+    connection: []
   },
   phone_number: ""
 

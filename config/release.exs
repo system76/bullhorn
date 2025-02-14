@@ -9,7 +9,6 @@ config :bullhorn,
   producer:
     {BroadwayRabbitMQ.Producer,
      queue: bullhorn_config["RABBITMQ_QUEUE_NAME"],
-     on_failure: :reject_and_requeue,
      connection: [
        username: bullhorn_config["RABBITMQ_USERNAME"],
        password: bullhorn_config["RABBITMQ_PASSWORD"],
