@@ -1,4 +1,4 @@
-FROM elixir:1.15 as build
+FROM elixir:1.14-slim as build
 
 # Install deps
 RUN set -xe; \
@@ -9,7 +9,7 @@ RUN set -xe; \
         git ;
 
 
-ENV LD_LIBRARY_PATH="/opt/glibc-2.34/lib:$LD_LIBRARY_PATH"
+# ENV LD_LIBRARY_PATH="/opt/glibc-2.34/lib:$LD_LIBRARY_PATH"
 
 # Use the standard /usr/local/src destination
 RUN mkdir -p /usr/local/src/bullhorn
