@@ -9,7 +9,7 @@ RUN set -xe; \
         git ;
 
 
-# ENV LD_LIBRARY_PATH="/opt/glibc-2.34/lib:$LD_LIBRARY_PATH"
+ENV LD_LIBRARY_PATH="/opt/glibc-2.34/lib:$LD_LIBRARY_PATH"
 
 # Use the standard /usr/local/src destination
 RUN mkdir -p /usr/local/src/bullhorn
