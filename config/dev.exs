@@ -6,6 +6,7 @@ config :bullhorn,
   producer:
     {BroadwayRabbitMQ.Producer,
      queue: "bullhorn",
+     on_failure: :reject_and_requeue,
      connection: [
        username: "bullhorn",
        password: System.get_env("RMQ_PASSWORD", "system76"),
