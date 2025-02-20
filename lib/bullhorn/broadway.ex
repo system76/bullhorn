@@ -115,7 +115,7 @@ defmodule Bullhorn.Broadway do
   end
 
   defp notify_handler({event, _message}) do
-    Logger.warn("Ignoring #{event} message")
+    Logger.warning("Ignoring #{event} message")
     {:ok, :ignored}
   end
 end
