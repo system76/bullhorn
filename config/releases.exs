@@ -14,7 +14,11 @@ config :bullhorn,
        password: bullhorn_config["RABBITMQ_PASSWORD"],
        host: bullhorn_config["RABBITMQ_HOST"],
        port: bullhorn_config["RABBITMQ_PORT"],
-       ssl_options: [verify: :verify_none]
+       ssl_options: [verify: :verify_none],
+       heartbeat: 120,
+       connection_timeout: 120_000,
+       network_recovery_interval: 15_000,
+       automatic_recovery: true
      ]},
   phone_number: bullhorn_config["TWILIO_PHONE_NUMBER"]
 
